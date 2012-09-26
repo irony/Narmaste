@@ -10,6 +10,7 @@ function MapCtrl($scope, $http){
   $scope.position = undefined;
 
   $scope.flatStyle = undefined;
+  $scope.mapUrl = undefined;
 
   delete $http.defaults.headers.common['X-Requested-With'];
 
@@ -23,23 +24,32 @@ function MapCtrl($scope, $http){
 
   compass.onHeadingChange = function(heading){
     console.log(heading);
+
     // bind();
   };
   compass.onPositionChange = function(position){
     $scope.position = position;
 
-    $scope.flatStyle = 'background: url(' + mapUrl.replace('{lat}', position.lat).replace('{lng}', position.lng).replace('{zoom}', zoom) + ')';
+    $scope.mapUrl = mapUrl.replace('{lat}', position.lat).replace('{lng}', position.lng).replace('{zoom}', zoom);
 
     bind();
   };
 
+  $scope.$watch('query', function(){
+    console.log('queryChange');
+    bind();
+  });
+
   function bind(){
+    if (!$scope.position)
+      return;
+
     $http.get(poiUrl.replace('{query}', $scope.query).replace('{lng}', $scope.position.lng).replace('{lat}', $scope.position.lat))
     .success(function(data){
 
       data = data.map(function(poi){
-        poi.x = 640 + ( poi.Position.Longitude - $scope.position.lng) * (zoomLevelScales[zoom] / 10);
-        poi.y = 640 + ( $scope.position.lat - poi.Position.Latitude ) * (zoomLevelScales[zoom] / 10);
+        poi.x = 640 + ( poi.Position.Longitude - $scope.position.lng ) * (zoomLevelScales[zoom] / 10);
+        poi.y = 640 - ( poi.Position.Latitude - $scope.position.lat ) * (zoomLevelScales[zoom] / 10);
 
         poi.style = 'left:' + Math.round(poi.x) + "px; top:" + Math.round(poi.y) + "px";
 

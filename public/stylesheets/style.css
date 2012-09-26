@@ -10,6 +10,11 @@ a {
 html { height: 100%; width: 100% }
 body { height: 100%; width: 100% }
 
+input {
+    z-index: 1000;
+    position: absolute;
+}
+
 #flat { 
         height: 1280px; 
     width: 1280px;

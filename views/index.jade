@@ -1,10 +1,11 @@
 script(src="/javascripts/map.js")
 
 h1= title
-p Welcome to #{title}
 
 
-div#flat(ng-controller="MapCtrl",style="{{flatStyle}}")
+div#flat(ng-controller="MapCtrl",ng-style="{{flatStyle}}")
+  img(ng-src="{{mapUrl}}")
   div(title="{{poi.Name}}",ng-repeat="poi in pois",class="marker open-{{poi.OpenToday}}", style="{{poi.style}}")
-    img(src="{{poi.IconUrl}}")
+    img(ng-src="{{poi.IconUrl}}")
     
+  input(ng-model="query")

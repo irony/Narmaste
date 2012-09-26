@@ -53,7 +53,7 @@ function Compass(options)
 
         // todo: add average filter here
         if (heading != self.heading && self.onHeadingChange){
-          self.onHeadingChange(self.heading);
+          self.onHeadingChange(self.heading, _transform);
         }
 
     });
