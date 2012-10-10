@@ -3,9 +3,14 @@ script(src="/javascripts/map.js")
 h1= title
 
 
+
+div.picnic.stripes
+  test
+
 div#flat(ng-controller="MapCtrl",ng-style="{{flatStyle}}")
   img(ng-src="{{mapUrl}}")
   div(title="{{poi.Name}}",ng-repeat="poi in pois",class="marker open-{{poi.OpenToday}}", style="{{poi.style}}")
     img(ng-src="{{poi.IconUrl}}")
     
-  input(ng-model="query")
+input(ng-model="query")
+input(type="range", ng-model="zoom")

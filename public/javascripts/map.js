@@ -16,29 +16,35 @@ function MapCtrl($scope, $http){
 
   var poiUrl = 'http://narmaste.se/Map/JsonQuery?q={query}&lng={lng}&lat={lat}';
   var mapUrl = "https://maps.googleapis.com/maps/api/staticmap?center={lat},{lng}&zoom={zoom}&scale=2&size=640x640&maptype=terrain&sensor=true";
-
+      
   var compass = new Compass();
 
   var scale = 20000;
-  var zoom = 13;
-
-  compass.onHeadingChange = function(heading){
-    console.log(heading);
-
-    // bind();
-  };
-  compass.onPositionChange = function(position){
-    $scope.position = position;
-
-    $scope.mapUrl = mapUrl.replace('{lat}', position.lat).replace('{lng}', position.lng).replace('{zoom}', zoom);
-
-    bind();
-  };
+  $scope.zoom = 15;
 
   $scope.$watch('query', function(){
     console.log('queryChange');
     bind();
   });
+
+  $scope.$watch('position', function(){
+    console.log('positionChange');
+    if ($scope.position) {
+      $scope.mapUrl = mapUrl.replace('{lat}', $scope.position.lat).replace('{lng}', $scope.position.lng).replace('{zoom}', $scope.zoom || 12);
+    }
+    bind();
+  });
+
+
+  compass.onHeadingChange = function(heading){
+    console.log(heading);
+    // bind();
+  };
+  compass.onPositionChange = function(position){
+    console.log(position);
+    $scope.position = position;
+  };
+
 
   function bind(){
     if (!$scope.position)
@@ -48,8 +54,8 @@ function MapCtrl($scope, $http){
     .success(function(data){
 
       data = data.map(function(poi){
-        poi.x = 640 + ( poi.Position.Longitude - $scope.position.lng ) * (zoomLevelScales[zoom] / 10);
-        poi.y = 640 - ( poi.Position.Latitude - $scope.position.lat ) * (zoomLevelScales[zoom] / 10);
+        poi.x = 640 + ( poi.Position.Longitude - $scope.position.lng ) * (zoomLevelScales[$scope.zoom] / 10);
+        poi.y = 640 - ( poi.Position.Latitude - $scope.position.lat ) * (zoomLevelScales[$scope.zoom] / 10);
 
         poi.style = 'left:' + Math.round(poi.x) + "px; top:" + Math.round(poi.y) + "px";
 

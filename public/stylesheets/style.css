@@ -19,11 +19,12 @@ input {
         height: 1280px; 
     width: 1280px;
     position: absolute; 
-    top: 0%;
+    top: -30%;
     left: 0%;
     opacity:0.9;
         -webkit-backface-visibility:visible;
         -webkit-transform-style: preserve-3d;
+    -webkit-transform: rotateX(70deg);
  
 }
 #you
@@ -115,4 +116,24 @@ rgba(200, 0, 0, .5) 50%,
 rgba(200, 0, 0, .5));
 }
 
-​
+​.two:link, .two:visited {  
+    background: #2876b2;  
+    background: -webkit-linear-gradient(#2876b2, #549ad0);  
+    background: -moz-linear-gradient(#2876b2, #549ad0);  
+    background: -o-linear-gradient(#2876b2, #549ad0);  
+    background: -ms-linear-gradient(#2876b2, #549ad0);  
+    background: linear-gradient(#2876b2, #549ad0);  
+    background-repeat: repeat;  
+    -webkit-background-size: 100% 200%;  
+    -moz-background-size: 100% 200%;  
+    background-size: 100% 200%;  
+    -webkit-transition: all .5s linear;  
+    -moz-transition: all .5s linear;  
+    -o-transition: all .5s linear;  
+    -ms-transition: all .5s linear;  
+    transition: all .5s linear;  
+}  
+  
+.two:hover, .two:focus, .two:active {  
+    background-position: 0 -102%;  
+} 
