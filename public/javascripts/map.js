@@ -2,13 +2,14 @@
 // http://narmaste.se/Map/JsonQuery?q=brevlada&lng=17.271347045898455&lat=59.23474362209861
 function MapCtrl($scope, $http){
   $scope.pois = ['poi1', 'poi2'];
-  $scope.query = 'brevlåda';
+  $scope.query = undefined;
   $scope.position = undefined;
   $scope.heading = undefined;
 
   $scope.flatStyle = undefined;
   $scope.mapUrl = undefined;
 
+  // Toggle UI
   $scope.menuOpen = false;
   $scope.popupOpen = false;
 
@@ -17,7 +18,7 @@ function MapCtrl($scope, $http){
   delete $http.defaults.headers.common['X-Requested-With'];
 
   var poiUrl = 'api/poi?q={query}&lng={lng}&lat={lat}';
-  var mapUrl = "https://maps.googleapis.com/maps/api/staticmap?center={lat},{lng}&zoom={zoom}&scale=2&size=640x640&maptype=terrain&sensor=true&style=feature:all%7Csaturation:-100%7Cweight:0.8&style=feature:water%7Clightness:90";
+  var mapUrl = "https://maps.googleapis.com/maps/api/staticmap?center={lat},{lng}&zoom={zoom}&scale=2&size=640x640&maptype=terrain&sensor=true&style=feature:all%7Csaturation:-100%7Cweight:0.8";
   var compass = new Compass();
 
   var scale = 20000;
