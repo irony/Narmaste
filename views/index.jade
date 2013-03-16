@@ -19,6 +19,12 @@ div#wrapper(ng-controller="MapCtrl")
 
 	div#menuLeft(ng-click="menuOpen = !menuOpen")
 
-	div#overlay(ng-show="menuOpen")
-		div#menu
+	div#overlay(ng-class="{opacityOpen: menuOpen}")
+		div#menu(ng-class="{menuOpen: menuOpen}")
+			i(class="icon-food", ng-click="updateQuery('mcdonalds')")
+			i(class="icon-hospital", ng-click="updateQuery('sjukhus')")
+			i(class="icon-beer", ng-click="updateQuery('bar')")
+			i(class="icon-film", ng-click="updateQuery('biograf')")
+			i(class="icon-home", ng-click="updateQuery('hem')")
+			i(class="icon-shopping-cart", ng-click="updateQuery('mataffär')")
 	//input(type="range", ng-model="zoom")

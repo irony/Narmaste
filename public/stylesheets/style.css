@@ -1,3 +1,5 @@
+/* General
+----------------------------------------------------*/
 html, body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   width:100%;
@@ -9,14 +11,16 @@ html, body {
   overflow:hidden;
   box-sizing:border-box;
 }
-
 a {
   color: #00B7FF;
 }
+
+/* Layout
+----------------------------------------------------*/
 #search {
   background:#333;
   width:100%;
-  padding:25px 10px 10px 10px;
+  padding:30px 10px 10px 10px;
     box-sizing:border-box;
   position:fixed;
   top:0;
@@ -41,7 +45,7 @@ input:focus {
     width: 1280px;
     position: absolute;
     z-index:1;
-    top:-100%;
+    top:-50%;
     left:0%;
     opacity:0.9;
     -webkit-backface-visibility:visible;
@@ -164,14 +168,16 @@ rgba(200, 0, 0, .5));
 
 
 #overlay {
-  position:absolute;
+  position:fixed;
   top:0;
   left:0;
   height:100%;
   width:100%;
   background:rgba(33,33,33,0.6);
-  z-index:1000;
-  -webkit-transform:translate3d(0,0,1000px);
+  z-index:3000;
+  -webkit-transform:translate3d(0,0,3000px);
+  opacity:0;
+  -webkit-transition:all 200ms ease;
 }
 
 #menuLeft {
@@ -288,13 +294,40 @@ background: linear-gradient(to bottom,
 }
 #menu {
   position: absolute;
-  bottom:50px;
-  left:5px;
-  width:60%;
-  height:100px;
+  top:0;
+  left:50%;
+  width:0%;
+  height:0%;
   background: #ffffff;
   border-radius:5px;
   z-index:3000;
   -webkit-transform:translate3d(0,0,3000px);
   box-shadow:0px 0px 5px rgba(33,33,33,0.6);
+  box-sizing:border-box;
+  padding:20px;
+  margin-left:-40%;
+  margin-top:-92px;
+  opacity:0;
+  -webkit-transition:all 300ms ease;
+}
+#menu i {
+  display:inline-block;
+  font-size:32px;
+  color:#666;
+  -webkit-transition:all 300ms ease;
+  cursor:pointer;
+  width:33%;
+  text-align:center;
+  padding:20px 0;
+}
+#menu i:hover {
+  color:#ff0077;
+}
+.opacityOpen, .menuOpen {
+  opacity:1 !important;
+}
+.menuOpen {
+  width:80% !important;
+  height:auto !important;
+  top:50% !important;
 }
