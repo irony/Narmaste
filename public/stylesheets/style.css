@@ -108,12 +108,13 @@ input:focus {
     -webkit-backface-visibility:visible;
     -webkit-transform-style: preserve-3d;
     -webkit-transform:perspective(800px) translateZ(0) rotateX(60deg) rotateZ(0) translate3d(0,0,1px);
+
 }
 
 #you
 {
     margin-top:-256px;
-    margin-left:-128px;
+    margin-left:-256px;
     position: absolute;
     border:0;
     -webkit-backface-visibility:visible;
@@ -123,7 +124,7 @@ input:focus {
 #flat .marker
 {
     position: absolute;
-    -webkit-transform: translateZ(50px) rotateX(-60deg) rotateY(0deg);
+    -webkit-transform: translateZ(0px) rotateX(-60deg) rotateY(0deg);
         -webkit-transform-origin: center bottom;
     color: #000;
     font-weight: bold;
