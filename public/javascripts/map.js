@@ -19,7 +19,8 @@ function MapCtrl($scope, $http){
   delete $http.defaults.headers.common['X-Requested-With'];
 
   var poiUrl = 'api/poi?q={query}&lng={lng}&lat={lat}';
-  var mapUrl = "https://maps.googleapis.com/maps/api/staticmap?center={lat},{lng}&zoom={zoom}&scale=2&size=256x256&maptype=terrain&sensor=true&style=feature:all%7Csaturation:-100%7Cweight:0.8&style=feature:water%7Clightness:90";
+  var key =   'AIzaSyCxnLwfu0GSgTgFTjxQeV4_13jlmuMSTfU';
+  var mapUrl = "https://maps.googleapis.com/maps/api/staticmap?center={lat},{lng}&zoom={zoom}&scale=2&size=256x256&maptype=terrain&sensor=true&style=feature:all%7Csaturation:-100%7Cweight:0.8&style=feature:water%7Clightness:90&key=" + key;
   var compass = new Compass();
 
   var scale = 20000;
@@ -58,12 +59,18 @@ function MapCtrl($scope, $http){
       $scope.maps = transformMatrix.map(function(transform){
         
         var point = {
-          x : center.x + transform.x * 256 / scale,
-          y : center.y + transform.y * 256 / scale
+          x : (center.x + transform.x * 256) / scale,
+          y : (center.y + transform.y * 256) / scale
         };
         
         var position = projection.fromPointToLatLng({x:point.x,y:point.y});
-        return mapUrl.replace('{lat}', position.lat).replace('{lng}', position.lng).replace('{zoom}', $scope.zoom || 12);
+        return {
+          point:{
+            x:Math.floor(center.x + transform.x * 256),
+            y:Math.floor(center.y + transform.y * 256)
+          },
+          url : mapUrl.replace('{lat}', position.lat).replace('{lng}', position.lng).replace('{zoom}', $scope.zoom || 12)
+        };
       });
     }
     bind();
@@ -102,8 +109,8 @@ function MapCtrl($scope, $http){
 
         console.log(pixelOffset);
 
-        poi.x = pixelOffset.x; // 2* because scale 2
-        poi.y = pixelOffset.y;
+        poi.x = pixelOffset.x + 256; // 2* because scale 2
+        poi.y = pixelOffset.y + 256;
         poi.style = 'left:' + Math.round(poi.x) + "px; top:" + Math.round(poi.y) + "px";
 
         return poi;
