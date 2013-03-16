@@ -1,4 +1,4 @@
-
+var MERCATOR_RANGE = 256;
 
 function bound(value, opt_min, opt_max) {
   if (opt_min !== null) value = Math.max(value, opt_min);
@@ -14,39 +14,30 @@ function radiansToDegrees(rad) {
   return rad / (Math.PI / 180);
 }
 
-function MercatorProjection(tileSize) {
-  this.pixelOrigin_ = {
-    x : tileSize / 2,
-    y : tileSize / 2
-  };
-
-  this.pixelsPerLonDegree_ = tileSize / 360;
-  this.pixelsPerLonRadian_ = tileSize / (2 * Math.PI);
-  console.log(this);
+function MercatorProjection() {
+  this.pixelOrigin_ = {x: MERCATOR_RANGE / 2, y: MERCATOR_RANGE / 2};
+  this.pixelsPerLonDegree_ = MERCATOR_RANGE / 360;
+  this.pixelsPerLonRadian_ = MERCATOR_RANGE / (2 * Math.PI);
 }
 
 MercatorProjection.prototype.fromLatLngToPoint = function(latLng, opt_point) {
-  var me = this;
-  var point = opt_point || {x: 0, y: 0};
-  var origin = me.pixelOrigin_;
+  var point = opt_point || {x:0, y:0};
 
-  point.x = origin.x + latLng.lng * me.pixelsPerLonDegree_;
-
+  var origin = this.pixelOrigin_;
+  point.x = origin.x + latLng.lng * this.pixelsPerLonDegree_;
   // NOTE(appleton): Truncating to 0.9999 effectively limits latitude to
-  // 89.189.  This is about a third of a tile past the edge of the world
-  // tile.
+  // 89.189.  This is about a third of a tile past the edge of the world tile.
   var siny = bound(Math.sin(degreesToRadians(latLng.lat)), -0.9999, 0.9999);
-  point.y = origin.y + 0.5 * Math.log((1 + siny) / (1 - siny)) *
-      -me.pixelsPerLonRadian_;
+  point.y = origin.y + 0.5 * Math.log((1 + siny) / (1 - siny)) * -this.pixelsPerLonRadian_;
   return point;
 };
 
 MercatorProjection.prototype.fromPointToLatLng = function(point) {
-  var me = this;
-  var origin = me.pixelOrigin_;
-  var lng = (point.x - origin.x) / me.pixelsPerLonDegree_;
-  var latRadians = (point.y - origin.y) / -me.pixelsPerLonRadian_;
-  var lat = radiansToDegrees(2 * Math.atan(Math.exp(latRadians)) -
-      Math.PI / 2);
-  return {x:lat, y:lng};
+  var origin = this.pixelOrigin_;
+  var lng = (point.x - origin.x) / this.pixelsPerLonDegree_;
+  var latRadians = (point.y - origin.y) / -this.pixelsPerLonRadian_;
+  var lat = radiansToDegrees(2 * Math.atan(Math.exp(latRadians)) - Math.PI / 2);
+  return {lat: lat, lng: lng};
 };
+
+//pixelCoordinate = worldCoordinate * Math.pow(2,zoomLevel)

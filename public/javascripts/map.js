@@ -1,7 +1,5 @@
 
 // http://narmaste.se/Map/JsonQuery?q=brevlada&lng=17.271347045898455&lat=59.23474362209861
-
-
 function MapCtrl($scope, $http){
   $scope.pois = ['poi1', 'poi2'];
   $scope.query = 'brevlåda';
@@ -56,15 +54,25 @@ function MapCtrl($scope, $http){
     if (!$scope.position)
       return;
 
-    var projection = new MercatorProjection(256);
+    var projection = new MercatorProjection();
+
+
+    scale = Math.pow(2, $scope.zoom);
 
     $http.get(poiUrl.replace('{query}', $scope.query).replace('{lng}', $scope.position.lng).replace('{lat}', $scope.position.lat))
     .success(function(data){
       data = data.map(function(poi){
-        var point = projection.fromLatLngToPoint({lng:poi.Position.Longitude, lat: poi.Position.Latitude});
-        console.log(point);
-        poi.x = point.x * 2; // 2* because scale 2
-        poi.y = point.y * 2;
+        var center = projection.fromLatLngToPoint($scope.position);
+        var point = projection.fromLatLngToPoint({lng:poi.Position.Longitude, lat: poi.Position.Latitude}, {x:center.lng, y:center.lat});
+
+        var pixelOffset = {x: Math.floor((center.x - point.x) * scale),
+            y: Math.floor((center.y - point.y) * scale)
+        };
+
+        console.log(pixelOffset);
+        
+        poi.x = pixelOffset.x * 2; // 2* because scale 2
+        poi.y = pixelOffset.y * 2;
         poi.style = 'left:' + Math.round(poi.x) + "px; top:" + Math.round(poi.y) + "px";
 
         return poi;
