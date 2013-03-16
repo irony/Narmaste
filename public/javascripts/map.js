@@ -17,7 +17,7 @@ function MapCtrl($scope, $http){
   delete $http.defaults.headers.common['X-Requested-With'];
 
   var poiUrl = 'api/poi?q={query}&lng={lng}&lat={lat}';
-  var mapUrl = "https://maps.googleapis.com/maps/api/staticmap?center={lat},{lng}&zoom={zoom}&scale=1&size=640x640&maptype=terrain&sensor=true";
+  var mapUrl = "https://maps.googleapis.com/maps/api/staticmap?center={lat},{lng}&zoom={zoom}&scale=2&size=640x640&maptype=terrain&sensor=true";
       
   var compass = new Compass();
 
@@ -63,16 +63,17 @@ function MapCtrl($scope, $http){
     .success(function(data){
       data = data.map(function(poi){
         var center = projection.fromLatLngToPoint($scope.position);
-        var point = projection.fromLatLngToPoint({lng:poi.Position.Longitude, lat: poi.Position.Latitude}, {x:center.lng, y:center.lat});
+        var point = projection.fromLatLngToPoint({lng:poi.Position.Longitude, lat: poi.Position.Latitude});
 
-        var pixelOffset = {x: Math.floor((center.x - point.x) * scale),
-            y: Math.floor((center.y - point.y) * scale)
+        var pixelOffset = {
+          x: Math.floor((center.x - point.x) * scale),
+          y: Math.floor((center.y - point.y) * scale)
         };
 
         console.log(pixelOffset);
-        
-        poi.x = pixelOffset.x * 2; // 2* because scale 2
-        poi.y = pixelOffset.y * 2;
+
+        poi.x = pixelOffset.x; // 2* because scale 2
+        poi.y = pixelOffset.y;
         poi.style = 'left:' + Math.round(poi.x) + "px; top:" + Math.round(poi.y) + "px";
 
         return poi;
