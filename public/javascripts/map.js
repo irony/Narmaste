@@ -56,12 +56,15 @@ function MapCtrl($scope, $http){
     if (!$scope.position)
       return;
 
+    var projection = new MercatorProjection(1280);
+
     $http.get(poiUrl.replace('{query}', $scope.query).replace('{lng}', $scope.position.lng).replace('{lat}', $scope.position.lat))
     .success(function(data){
       data = data.map(function(poi){
-        poi.x = 640 + ( poi.Position.Longitude - $scope.position.lng ) * (zoomLevelScales[$scope.zoom] / 10);
-        poi.y = 640 - ( poi.Position.Latitude - $scope.position.lat ) * (zoomLevelScales[$scope.zoom] / 10);
-
+        var point = projection.fromLatLngToPoint({lng:poi.Position.Longitude, lat: poi.Position.Latitude});
+        console.log(point);
+        poi.x = point.x * 2; // 2* because scale 2
+        poi.y = point.y * 2;
         poi.style = 'left:' + Math.round(poi.x) + "px; top:" + Math.round(poi.y) + "px";
 
         return poi;
@@ -73,26 +76,5 @@ function MapCtrl($scope, $http){
   }
 }
 
-// TODO: get this via api instead
-var zoomLevelScales = {
-  20 : 1128.497220,
-  19 : 2256.994440,
-  18 : 4513.988880,
-  17 : 9027.977761,
-  16 : 18055.955520,
-  15 : 36111.911040,
-  14 : 72223.822090,
-  13 : 144447.644200,
-  12 : 288895.288400,
-  11 : 577790.576700,
-  10 : 1155581.153000,
-  9  : 2311162.307000,
-  8  : 4622324.614000,
-  7  : 9244649.227000,
-  6  : 18489298.450000,
-  5  : 36978596.910000,
-  4  : 73957193.820000,
-  3  : 147914387.600000,
-  2  : 295828775.300000,
-  1  : 591657550.500000
-};
+
+
