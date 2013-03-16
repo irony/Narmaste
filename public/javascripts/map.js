@@ -36,6 +36,11 @@ function MapCtrl($scope, $http){
     bind();
   });
 
+  $scope.mapClick = function(event){
+    console.log(event);
+
+  };
+
   $scope.$watch('position', function(){
 
     if ($scope.position) {
