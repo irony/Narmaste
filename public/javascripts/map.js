@@ -29,7 +29,7 @@ function MapCtrl($scope, $http){
   $scope.updateQuery = function(type) {
     $scope.query = type;
     $scope.menuOpen = false;
-  }
+  };
 
   $scope.$watch('query', function(){
     console.log('queryChange');
@@ -59,8 +59,8 @@ function MapCtrl($scope, $http){
       $scope.maps = transformMatrix.map(function(transform){
         
         var point = {
-          x : (center.x + transform.x * 256) / scale,
-          y : (center.y + transform.y * 256) / scale
+          x : center.x + ((transform.x * 256) / scale),
+          y : center.y + ((transform.y * 256) / scale)
         };
         
         var position = projection.fromPointToLatLng({x:point.x,y:point.y});
@@ -109,8 +109,8 @@ function MapCtrl($scope, $http){
 
         console.log(pixelOffset);
 
-        poi.x = pixelOffset.x + 256; // 2* because scale 2
-        poi.y = pixelOffset.y + 256;
+        poi.x = pixelOffset.x + 256 * 2;
+        poi.y = pixelOffset.y + 256 * 2;
         poi.style = 'left:' + Math.round(poi.x) + "px; top:" + Math.round(poi.y) + "px";
 
         return poi;
