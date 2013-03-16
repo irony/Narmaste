@@ -45,7 +45,7 @@ function MapCtrl($scope, $http){
 
     if ($scope.position) {
       var center = projection.fromLatLngToPoint($scope.position);
-
+      var zoom = $scope.zoom || 12;
      
       
       console.log('center', center);
@@ -61,7 +61,7 @@ function MapCtrl($scope, $http){
       {x: 0, y: 1},
       {x: 1, y: 1},
       ];
-      $scope.maps = transformMatrix.map(function(transform){
+      var maps = transformMatrix.map(function(transform){
         
         var point = {
           x : center.x + ((transform.x * 256) / scale),
@@ -70,13 +70,15 @@ function MapCtrl($scope, $http){
         
         var position = projection.fromPointToLatLng({x:point.x,y:point.y});
         return {
+          transform : transform,
           point:{
-            x:Math.floor(center.x + transform.x * 256) - 256,
-            y:Math.floor(center.y + transform.y * 256) - 256
+            x:Math.floor(center.x + transform.x * 256) - 256 - 256 / 2,
+            y:Math.floor(center.y + transform.y * 256) - 256 - 256 / 2
           },
-          url : mapUrl.replace('{lat}', position.lat).replace('{lng}', position.lng).replace('{zoom}', $scope.zoom || 12)
+          url : mapUrl.replace('{lat}', position.lat).replace('{lng}', position.lng).replace('{zoom}', zoom)
         };
       });
+      $scope.maps = maps;
     }
     bind();
   });
