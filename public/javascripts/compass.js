@@ -1,3 +1,16 @@
+// Compass.js will conform the device orientation for different vendors and normalize the heading to a value
+// between 0-360 degrees.
+// 
+// To use the compass just initialize it and attach events on heading change
+//   var compass = new Compass();
+//   compass.onHeadingChange = function(heading){
+//    console.log(heading) // 0-360 int
+//   }
+//   
+//   compass.onPositionChange = function(position){
+//    console.log(position.lat, position.lng) // 55.18, 18.334
+//   }
+
 function Compass(options)
 {
 
