@@ -19,7 +19,8 @@ function MapCtrl($scope, $http){
   delete $http.defaults.headers.common['X-Requested-With'];
 
   var poiUrl = 'api/poi?q={query}&lng={lng}&lat={lat}';
-  var mapUrl = "https://maps.googleapis.com/maps/api/staticmap?center={lat},{lng}&zoom={zoom}&scale=2&size=256x256&maptype=terrain&sensor=true&style=feature:all%7Csaturation:-100%7Cweight:0.8&style=feature:water%7Clightness:90";
+  var key =   'AIzaSyCxnLwfu0GSgTgFTjxQeV4_13jlmuMSTfU';
+  var mapUrl = "https://maps.googleapis.com/maps/api/staticmap?center={lat},{lng}&zoom={zoom}&scale=2&size=256x256&maptype=terrain&sensor=true&style=feature:all%7Csaturation:-100%7Cweight:0.8&style=feature:water%7Clightness:90&key=" + key;
   var compass = new Compass();
 
   var scale = 20000;
@@ -63,7 +64,13 @@ function MapCtrl($scope, $http){
         };
         
         var position = projection.fromPointToLatLng({x:point.x,y:point.y});
-        return mapUrl.replace('{lat}', position.lat).replace('{lng}', position.lng).replace('{zoom}', $scope.zoom || 12);
+        return {
+          point:{
+            x:Math.floor(center.x + transform.x * 256) - 256,
+            y:Math.floor(center.y + transform.y * 256) - 256
+          },
+          url : mapUrl.replace('{lat}', position.lat).replace('{lng}', position.lng).replace('{zoom}', $scope.zoom || 12)
+        };
       });
     }
     bind();
@@ -77,12 +84,6 @@ function MapCtrl($scope, $http){
     $scope.heading = Math.round(heading);
     console.log('scopeHeading', $scope.heading);
     document.getElementById('flat').style.webkitTransform = 'perspective(800px) translateZ(0) rotateX(60deg) rotateZ(' + -heading + 'deg) translate3d(0,0,1px)';
-
-    var markers = document.getElementsByClassName('marker');
-
-    Array.prototype.forEach.call(markers, function(marker){
-        marker.style.webkitTransform = "translateZ(50px) rotateX(-90deg) rotateY(" + -heading + "deg) ";
-    });
   };
   compass.onPositionChange = function(position){
     $scope.position = position;
@@ -108,8 +109,8 @@ function MapCtrl($scope, $http){
 
         console.log(pixelOffset);
 
-        poi.x = pixelOffset.x; // 2* because scale 2
-        poi.y = pixelOffset.y;
+        poi.x = pixelOffset.x + 256 * 2;
+        poi.y = pixelOffset.y + 256 * 2;
         poi.style = 'left:' + Math.round(poi.x) + "px; top:" + Math.round(poi.y) + "px";
 
         return poi;
@@ -121,6 +122,5 @@ function MapCtrl($scope, $http){
     });
   }
 }
-
 
 
