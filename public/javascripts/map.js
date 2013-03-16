@@ -28,7 +28,7 @@ function MapCtrl($scope, $http){
   $scope.updateQuery = function(type) {
     $scope.query = type;
     $scope.menuOpen = false;
-  }
+  };
 
   $scope.$watch('query', function(){
     console.log('queryChange');
@@ -58,8 +58,8 @@ function MapCtrl($scope, $http){
       $scope.maps = transformMatrix.map(function(transform){
         
         var point = {
-          x : center.x + transform.x * 256 / scale,
-          y : center.y + transform.y * 256 / scale
+          x : center.x + ((transform.x * 256) / scale),
+          y : center.y + ((transform.y * 256) / scale)
         };
         
         var position = projection.fromPointToLatLng({x:point.x,y:point.y});
