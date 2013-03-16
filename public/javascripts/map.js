@@ -89,12 +89,6 @@ function MapCtrl($scope, $http){
     $scope.heading = Math.round(heading);
     console.log('scopeHeading', $scope.heading);
     document.getElementById('flat').style.webkitTransform = 'perspective(800px) translateZ(0) rotateX(60deg) rotateZ(' + -heading + 'deg) translate3d(0,0,1px)';
-
-    var markers = document.getElementsByClassName('marker');
-
-    Array.prototype.forEach.call(markers, function(marker){
-        marker.style.webkitTransform = "translateZ(50px) rotateX(-90deg) rotateY(" + -heading + "deg) ";
-    });
   };
   compass.onPositionChange = function(position){
     $scope.position = position;
@@ -120,8 +114,8 @@ function MapCtrl($scope, $http){
 
         console.log(pixelOffset);
 
-        poi.x = pixelOffset.x;
-        poi.y = pixelOffset.y;
+        poi.x = pixelOffset.x + 256 * 2;
+        poi.y = pixelOffset.y + 256 * 2;
         poi.style = 'left:' + Math.round(poi.x) + "px; top:" + Math.round(poi.y) + "px";
 
         return poi;
@@ -133,6 +127,5 @@ function MapCtrl($scope, $http){
     });
   }
 }
-
 
 
