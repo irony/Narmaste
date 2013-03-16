@@ -16,9 +16,9 @@ a {
 #search {
   background:#333;
   width:100%;
-  padding:10px;
+  padding:25px 10px 10px 10px;
     box-sizing:border-box;
-  position:absolute;
+  position:fixed;
   top:0;
   left:0;
   z-index:20000;
@@ -41,12 +41,12 @@ input:focus {
     width: 1280px;
     position: absolute;
     z-index:1;
-    top:-48%;
-    left:-50%;
+    top:-100%;
+    left:0%;
     opacity:0.9;
     -webkit-backface-visibility:visible;
     -webkit-transform-style: preserve-3d;
-    -webkit-transform: rotateX(60deg) translate3d(0,0,1px);
+    -webkit-transform:perspective(800px) translateZ(0) rotateX(60deg) rotateZ(0) translate3d(0,0,1px);
 }
 #you
 {
@@ -175,7 +175,7 @@ rgba(200, 0, 0, .5));
 }
 
 #menuLeft {
-  position:absolute;
+  position:fixed;
   bottom:5px;
   left:5px;
   width:40px;
