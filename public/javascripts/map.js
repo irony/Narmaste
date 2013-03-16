@@ -1,3 +1,4 @@
+var projection = new MercatorProjection(256);
 
 // http://narmaste.se/Map/JsonQuery?q=brevlada&lng=17.271347045898455&lat=59.23474362209861
 function MapCtrl($scope, $http){
@@ -17,7 +18,7 @@ function MapCtrl($scope, $http){
   delete $http.defaults.headers.common['X-Requested-With'];
 
   var poiUrl = 'api/poi?q={query}&lng={lng}&lat={lat}';
-  var mapUrl = "https://maps.googleapis.com/maps/api/staticmap?center={lat},{lng}&zoom={zoom}&scale=2&size=640x640&maptype=terrain&sensor=true&style=feature:all%7Csaturation:-100%7Cweight:0.8&style=feature:water%7Clightness:90";
+  var mapUrl = "https://maps.googleapis.com/maps/api/staticmap?center={lat},{lng}&zoom={zoom}&scale=2&size=256x256&maptype=terrain&sensor=true&style=feature:all%7Csaturation:-100%7Cweight:0.8&style=feature:water%7Clightness:90";
   var compass = new Compass();
 
   var scale = 20000;
@@ -34,9 +35,35 @@ function MapCtrl($scope, $http){
   });
 
   $scope.$watch('position', function(){
-    console.log('positionChange');
+
     if ($scope.position) {
-      $scope.mapUrl = mapUrl.replace('{lat}', $scope.position.lat).replace('{lng}', $scope.position.lng).replace('{zoom}', $scope.zoom || 12);
+      var center = projection.fromLatLngToPoint($scope.position);
+
+     
+      
+      console.log('center', center);
+
+      var transformMatrix = [
+      {x:-1, y:-1},
+      {x: 0, y:-1},
+      {x: 1, y:-1},
+      {x:-1, y: 0},
+      {x: 0, y: 0},
+      {x: 1, y: 0},
+      {x:-1, y: 1},
+      {x: 0, y: 1},
+      {x: 1, y: 1},
+      ];
+      $scope.maps = transformMatrix.map(function(transform){
+        
+        var point = {
+          x : center.x + transform.x * 256 / scale,
+          y : center.y + transform.y * 256 / scale
+        };
+        
+        var position = projection.fromPointToLatLng({x:point.x,y:point.y});
+        return mapUrl.replace('{lat}', position.lat).replace('{lng}', position.lng).replace('{zoom}', $scope.zoom || 12);
+      });
     }
     bind();
   });
@@ -58,15 +85,13 @@ function MapCtrl($scope, $http){
     if (!$scope.position)
       return;
 
-    var projection = new MercatorProjection();
-
-
     scale = Math.pow(2, $scope.zoom);
+    var center = projection.fromLatLngToPoint($scope.position);
 
     $http.get(poiUrl.replace('{query}', $scope.query).replace('{lng}', $scope.position.lng).replace('{lat}', $scope.position.lat))
     .success(function(data){
+      data.push({Id: 'you', Position : {lng : $scope.position.lng, lat:$scope.position.lat}, Name: 'You', IconUrl:'/images/arrow_down.png'});
       data = data.map(function(poi){
-        var center = projection.fromLatLngToPoint($scope.position);
         var point = projection.fromLatLngToPoint({lng:poi.Position.Longitude, lat: poi.Position.Latitude});
 
         var pixelOffset = {
@@ -82,6 +107,7 @@ function MapCtrl($scope, $http){
 
         return poi;
       });
+
 
       $scope.pois = data;
       console.log($scope.pois);

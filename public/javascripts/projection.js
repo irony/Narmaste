@@ -1,5 +1,3 @@
-var MERCATOR_RANGE = 256;
-
 function bound(value, opt_min, opt_max) {
   if (opt_min !== null) value = Math.max(value, opt_min);
   if (opt_max !== null) value = Math.min(value, opt_max);
@@ -14,10 +12,10 @@ function radiansToDegrees(rad) {
   return rad / (Math.PI / 180);
 }
 
-function MercatorProjection() {
-  this.pixelOrigin_ = {x: MERCATOR_RANGE / 2, y: MERCATOR_RANGE / 2};
-  this.pixelsPerLonDegree_ = MERCATOR_RANGE / 360;
-  this.pixelsPerLonRadian_ = MERCATOR_RANGE / (2 * Math.PI);
+function MercatorProjection(tileSize) {
+  this.pixelOrigin_ = {x: tileSize / 2, y: tileSize / 2};
+  this.pixelsPerLonDegree_ = tileSize / 360;
+  this.pixelsPerLonRadian_ = tileSize / (2 * Math.PI);
 }
 
 MercatorProjection.prototype.fromLatLngToPoint = function(latLng, opt_point) {

@@ -8,8 +8,8 @@ div#wrapper(ng-controller="MapCtrl")
 		input(type="text", ng-model="query")
 
 	div#flat
-		img(ng-src="{{mapUrl}}")
-		div(title="{{poi.Name}}",ng-repeat="poi in pois",class="marker open-{{poi.OpenToday}}", style="{{poi.style}}", ng-mouseover="popupOpen = !popupOpen", ng-mouseleave="popupOpen = !popupOpen")
+		img(ng-repeat="map in maps", class="mapTile", ng-src="{{map}}")
+		div(id="{{poi.Id}}", title="{{poi.Name}}",ng-repeat="poi in pois",class="marker open-{{poi.OpenToday}}", style="{{poi.style}}", ng-mouseover="popupOpen = !popupOpen", ng-mouseleave="popupOpen = !popupOpen")
 			img(ng-src="{{poi.IconUrl}}")
 			div.popup(ng-show="popupOpen")
 				div.popupName
