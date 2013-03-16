@@ -5,7 +5,16 @@ div.picnic.stripes
 
 div#wrapper(ng-controller="MapCtrl")
 	div#search
-		input(type="text", ng-model="query")
+		div#searchInput
+			i(class="icon-search")
+			input(type="text", ng-model="query")
+			div#clearInput(ng-click="query = ''")
+				span x
+
+		div#closest(ng-show="query")
+			span Din närmaste "{{query}}" är 
+				div.closestHit {{pois[0].Name}}
+			i(class="icon-lock lockon")
 
 	div#flat
 		img(ng-repeat="map in maps", class="mapTile", ng-src="{{map}}")
@@ -18,13 +27,34 @@ div#wrapper(ng-controller="MapCtrl")
 					{{poi.Address}}
 
 	div#menuLeft(ng-click="menuOpen = !menuOpen")
-
+	div#overlayClick(ng-click="menuOpen = !menuOpen", ng-show="menuOpen")
 	div#overlay(ng-class="{opacityOpen: menuOpen}")
 		div#menu(ng-class="{menuOpen: menuOpen}")
-			i(class="icon-food", ng-click="updateQuery('mcdonalds')")
-			i(class="icon-hospital", ng-click="updateQuery('sjukhus')")
-			i(class="icon-beer", ng-click="updateQuery('bar')")
-			i(class="icon-film", ng-click="updateQuery('biograf')")
-			i(class="icon-home", ng-click="updateQuery('hem')")
-			i(class="icon-shopping-cart", ng-click="updateQuery('mataffär')")
+			div.menuItem(ng-click="updateQuery('Snabbmat')")
+				i(class="icon-food")
+				span Snabbmat
+			div.menuItem(ng-click="updateQuery('Bankomat')")
+				i(class="icon-arrow-down")
+				span Bankomat
+			div.menuItem(ng-click="updateQuery('Systembolaget')")
+				i(class="icon-glass")
+				span Systembolaget
+			div.menuItem(ng-click="updateQuery('biograf')")
+				i(class="icon-film")
+					span Biograf
+			div.menuItem(ng-click="updateQuery('Bensinmack')")
+				i(class="icon-road")
+				span Bensinmack
+			div.menuItem(ng-click="updateQuery('Apotek')")
+				i(class="icon-hospital")
+				span Apotek
+			div.menuItem(ng-click="updateQuery('mataffär')")
+				i(class="icon-shopping-cart")
+				span Mataffär
+			div.menuItem(ng-click="updateQuery('Ticnetombud')")
+				i(class="icon-tag")
+				span Ticnetombud
+			div.menuItem(ng-click="updateQuery('ATG-ombud')")
+				i(class="icon-bookmark")
+				span ATG-ombud
 	//input(type="range", ng-model="zoom")

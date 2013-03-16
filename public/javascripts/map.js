@@ -3,13 +3,14 @@ var projection = new MercatorProjection(256);
 // http://narmaste.se/Map/JsonQuery?q=brevlada&lng=17.271347045898455&lat=59.23474362209861
 function MapCtrl($scope, $http){
   $scope.pois = ['poi1', 'poi2'];
-  $scope.query = 'brevlåda';
+  $scope.query = undefined;
   $scope.position = undefined;
   $scope.heading = undefined;
 
   $scope.flatStyle = undefined;
   $scope.mapUrl = undefined;
 
+  // Toggle UI
   $scope.menuOpen = false;
   $scope.popupOpen = false;
 
