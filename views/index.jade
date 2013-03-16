@@ -27,7 +27,6 @@ div#wrapper(ng-controller="MapCtrl")
 					{{poi.Address}}
 
 	div#menuLeft(ng-click="menuOpen = !menuOpen")
-	div#overlayClick(ng-click="menuOpen = !menuOpen", ng-show="menuOpen")
 	div#overlay(ng-class="{opacityOpen: menuOpen}")
 		div#menu(ng-class="{menuOpen: menuOpen}")
 			div.menuItem(ng-click="updateQuery('Snabbmat')")

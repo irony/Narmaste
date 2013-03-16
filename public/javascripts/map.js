@@ -19,8 +19,7 @@ function MapCtrl($scope, $http){
   delete $http.defaults.headers.common['X-Requested-With'];
 
   var poiUrl = 'api/poi?q={query}&lng={lng}&lat={lat}';
-  var key =   'AIzaSyCxnLwfu0GSgTgFTjxQeV4_13jlmuMSTfU';
-  var mapUrl = "https://maps.googleapis.com/maps/api/staticmap?center={lat},{lng}&zoom={zoom}&scale=2&size=256x256&maptype=terrain&sensor=true&style=feature:all%7Csaturation:-100%7Cweight:0.8&style=feature:water%7Clightness:90&key=" + key;
+  var mapUrl = "https://maps.googleapis.com/maps/api/staticmap?center={lat},{lng}&zoom={zoom}&scale=2&size=256x256&maptype=terrain&sensor=true&style=feature:all%7Csaturation:-100%7Cweight:0.8&style=feature:water%7Clightness:90";
   var compass = new Compass();
 
   var scale = 20000;
@@ -89,6 +88,12 @@ function MapCtrl($scope, $http){
     $scope.heading = Math.round(heading);
     console.log('scopeHeading', $scope.heading);
     document.getElementById('flat').style.webkitTransform = 'perspective(800px) translateZ(0) rotateX(60deg) rotateZ(' + -heading + 'deg) translate3d(0,0,1px)';
+
+    var markers = document.getElementsByClassName('marker');
+
+    Array.prototype.forEach.call(markers, function(marker){
+        marker.style.webkitTransform = "translateZ(50px) rotateX(-90deg) rotateY(" + -heading + "deg) ";
+    });
   };
   compass.onPositionChange = function(position){
     $scope.position = position;
