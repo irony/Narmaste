@@ -22,6 +22,7 @@ function MercatorProjection(tileSize) {
 
   this.pixelsPerLonDegree_ = tileSize / 360;
   this.pixelsPerLonRadian_ = tileSize / (2 * Math.PI);
+  console.log(this);
 }
 
 MercatorProjection.prototype.fromLatLngToPoint = function(latLng, opt_point) {

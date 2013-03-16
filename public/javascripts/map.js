@@ -4,7 +4,7 @@
 
 function MapCtrl($scope, $http){
   $scope.pois = ['poi1', 'poi2'];
-  $scope.query = undefined;
+  $scope.query = 'brevlåda';
   $scope.position = undefined;
   $scope.heading = undefined;
 
@@ -19,7 +19,7 @@ function MapCtrl($scope, $http){
   delete $http.defaults.headers.common['X-Requested-With'];
 
   var poiUrl = 'api/poi?q={query}&lng={lng}&lat={lat}';
-  var mapUrl = "https://maps.googleapis.com/maps/api/staticmap?center={lat},{lng}&zoom={zoom}&scale=2&size=640x640&maptype=terrain&sensor=true";
+  var mapUrl = "https://maps.googleapis.com/maps/api/staticmap?center={lat},{lng}&zoom={zoom}&scale=1&size=640x640&maptype=terrain&sensor=true";
       
   var compass = new Compass();
 
@@ -56,7 +56,7 @@ function MapCtrl($scope, $http){
     if (!$scope.position)
       return;
 
-    var projection = new MercatorProjection(1280);
+    var projection = new MercatorProjection(256);
 
     $http.get(poiUrl.replace('{query}', $scope.query).replace('{lng}', $scope.position.lng).replace('{lat}', $scope.position.lat))
     .success(function(data){
