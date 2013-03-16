@@ -36,6 +36,11 @@ function MapCtrl($scope, $http){
     bind();
   });
 
+  $scope.mapClick = function(event){
+    console.log(event);
+
+  };
+
   $scope.$watch('position', function(){
 
     if ($scope.position) {
@@ -66,8 +71,8 @@ function MapCtrl($scope, $http){
         var position = projection.fromPointToLatLng({x:point.x,y:point.y});
         return {
           point:{
-            x:Math.floor(center.x + transform.x * 256),
-            y:Math.floor(center.y + transform.y * 256)
+            x:Math.floor(center.x + transform.x * 256) - 256,
+            y:Math.floor(center.y + transform.y * 256) - 256
           },
           url : mapUrl.replace('{lat}', position.lat).replace('{lng}', position.lng).replace('{zoom}', $scope.zoom || 12)
         };
@@ -109,8 +114,8 @@ function MapCtrl($scope, $http){
 
         console.log(pixelOffset);
 
-        poi.x = pixelOffset.x + 256 * 2;
-        poi.y = pixelOffset.y + 256 * 2;
+        poi.x = pixelOffset.x;
+        poi.y = pixelOffset.y;
         poi.style = 'left:' + Math.round(poi.x) + "px; top:" + Math.round(poi.y) + "px";
 
         return poi;
