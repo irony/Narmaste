@@ -46,7 +46,7 @@ function MapCtrl($scope, $http){
   compass.onHeadingChange = function(heading){
     $scope.heading = Math.round(heading);
     console.log('scopeHeading', $scope.heading);
-    document.getElementById('flat').style.webkitTransform = 'rotateZ(' + -heading + 'deg) rotateX(60deg) translate3d(0,0,1px)';
+    document.getElementById('flat').style.webkitTransform = 'perspective(800px) translateZ(0) rotateX(60deg) rotateZ(' + -heading + 'deg) translate3d(0,0,1px)';
   };
   compass.onPositionChange = function(position){
     $scope.position = position;
