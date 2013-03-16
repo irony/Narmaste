@@ -64,6 +64,11 @@ input:focus {
   padding-top:3px;
   font-size:18px;
   font-weight:bold;
+  cursor:pointer;
+  -webkit-transition:color 300ms ease;
+}
+#clearInput:hover {
+  color:#ff0077;
 }
 #closest {
   padding:20px 10px;
@@ -108,13 +113,17 @@ input:focus {
     -webkit-backface-visibility:visible;
     -webkit-transform-origin: center bottom;
     border: 2px solid black;
-    
 }
+/*
+    Array.prototype.forEach.call(markers, function(marker){
+        marker.style[_transform] = "translateZ(50px) rotateX(-90deg) rotateY(" + (-heading) + "deg) ";
+    });
+*/
 
 #flat .marker
 {
-    position: absolsute;
-    -webkit-transform: rotateX(-60deg) rotateY(0deg);
+    position: absolute;
+    -webkit-transform: translateZ(50px) rotateX(-60deg) rotateY(0deg);
         -webkit-transform-origin: center bottom;
     color: #000;
     font-weight: bold;
@@ -219,13 +228,13 @@ rgba(200, 0, 0, .5));
   position:fixed;
   top:0;
   left:0;
-  height:100%;
-  width:100%;
+  height:0;
+  width:0;
   background:rgba(33,33,33,0.6);
   z-index:3000;
   -webkit-transform:translate3d(0,0,3000px);
   opacity:0;
-  -webkit-transition:all 200ms ease;
+  -webkit-transition:opacity 200ms ease;
 }
 #menuLeft {
   position:fixed;
@@ -388,6 +397,8 @@ background: linear-gradient(to bottom,
 }
 .opacityOpen, .menuOpen {
   opacity:1 !important;
+  height:100% !important;
+  width:100% !important;
 }
 .menuOpen {
   bottom:60px !important;

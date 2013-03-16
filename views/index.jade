@@ -18,7 +18,7 @@ div#wrapper(ng-controller="MapCtrl")
 
 	div#flat
 		img(ng-src="{{mapUrl}}")
-		div(title="{{poi.Name}}",ng-repeat="poi in pois",class="marker open-{{poi.OpenToday}}", style="{{poi.style}}", ng-mouseover="popupOpen = !popupOpen", ng-mouseleave="popupOpen = !popupOpen")
+		div(title="{{poi.Name}}",ng-repeat="poi in pois",class="marker open-{{poi.OpenToday}}", style="{{poi.style}}", ng-mouseover="popupOpen = !popupOpen", ng-mouseleave="popupOpen = !popupOpen", ng-class="{markerOnTop: !menuOpen}")
 			img(ng-src="{{poi.IconUrl}}")
 			div.popup(ng-show="popupOpen")
 				div.popupName
@@ -27,7 +27,6 @@ div#wrapper(ng-controller="MapCtrl")
 					{{poi.Address}}
 
 	div#menuLeft(ng-click="menuOpen = !menuOpen")
-	div#overlayClick(ng-click="menuOpen = !menuOpen", ng-show="menuOpen")
 	div#overlay(ng-class="{opacityOpen: menuOpen}")
 		div#menu(ng-class="{menuOpen: menuOpen}")
 			div.menuItem(ng-click="updateQuery('Snabbmat')")
