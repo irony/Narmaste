@@ -52,6 +52,12 @@ input:focus {
   outline:none;
   border:none;
 }
+.mapTile{
+  width:256px;
+  height:256px;
+  float:left;
+}
+
 #clearInput {
   color:#666;
   width:30px;
@@ -94,8 +100,8 @@ input:focus {
   font-weight:normal;
 }
 #flat { 
-    height: 1280px; 
-    width: 1280px;
+    height: 768px; 
+    width: 768px;
     position: absolute;
     z-index:1;
     top:-50%;
@@ -105,20 +111,18 @@ input:focus {
     -webkit-transform-style: preserve-3d;
     -webkit-transform:perspective(800px) translateZ(0) rotateX(60deg) rotateZ(0) translate3d(0,0,1px);
 }
+
 #you
 {
-    top: 50%;
-    left: 50%;
+    margin-top:-256px;
+    margin-left:-128px;
     position: absolute;
+    border:0;
     -webkit-backface-visibility:visible;
     -webkit-transform-origin: center bottom;
     border: 2px solid black;
+
 }
-/*
-    Array.prototype.forEach.call(markers, function(marker){
-        marker.style[_transform] = "translateZ(50px) rotateX(-90deg) rotateY(" + (-heading) + "deg) ";
-    });
-*/
 
 #flat .marker
 {
