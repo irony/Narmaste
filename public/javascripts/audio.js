@@ -117,8 +117,8 @@ var player = (function (src, n, spriteLength, audioLead) {
       }
     }
   };
-})('/audio/TrackingDevice.mp3', 3, 2000, 7000);
- 
+})
+
 // myaudiosprite.mp3 is the complete audio sprite
 // 1 = the number of tracks, increase this for the desktop
 // 1 = the length of the individual audio clip

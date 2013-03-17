@@ -1,4 +1,5 @@
 var projection = new MercatorProjection(256);
+var player = new Track('/audio/TrackingDevice.mp3', 3, 2000, 7000);
 
 // http://narmaste.se/Map/JsonQuery?q=brevlada&lng=17.271347045898455&lat=59.23474362209861
 function MapCtrl($scope, $http){
@@ -31,9 +32,10 @@ function MapCtrl($scope, $http){
   var scale = 20000;
   $scope.zoom = 15;
 
-  $scope.openMenu = function(open){
-    if (open && $scope.pois.length) {
+  $scope.startTracker = function(open){
+    if (!open && $scope.pois.length) {
       $scope.trackingPoi = $scope.pois[0]; // TODO: let the user choose one ;)
+      console.log('tracking', $scope.trackingPoi);
     } else {
       $scope.trackingPoi = null;
     }
@@ -68,7 +70,7 @@ function MapCtrl($scope, $http){
       {x: 1, y: 1},
       ];
 
-      var maps = transformMatrix.map(function(transform){  
+      var maps = transformMatrix.map(function(transform){
         var point = {
           x : center.x + ((transform.x.toPrecisionFixed() * 256) / scale.toPrecisionFixed()),
           y : center.y + ((transform.y.toPrecisionFixed() * 256) / scale.toPrecisionFixed())
@@ -91,20 +93,27 @@ function MapCtrl($scope, $http){
   });
 
   var beepTimer = null;
+  var lastBearing = null;
 
   compass.onHeadingChange = function(heading){
+
     $scope.heading = Math.round(heading);
+      console.log('bearing', $scope.trackingPoi);
     if ($scope.trackingPoi){
       $scope.bearing = compass.getBearingDelta({lat: $scope.trackingPoi.Position.Latitude, lng: $scope.trackingPoi.Position.Longitude});
       $scope.distance = compass.getDistanceTo({lat: $scope.trackingPoi.Position.Latitude, lng: $scope.trackingPoi.Position.Longitude});
 
+
+
       clearTimeout(beepTimer);
-      beepTimer = setTimeout(function(){
-        if (Math.abs(heading) > 90) return player.play(0); // silent?
-        if (Math.abs(heading) > 40) return player.play(0);
-        if (Math.abs(heading) > 20) return player.play(1);
-        return player.play(2);
-      }, 200);
+      if (!lastBearing || Math.abs(lastBearing - $scope.bearing) > 3)
+      {
+        lastBearing = $scope.bearing;
+        if (Math.abs(heading) > 90) player.play(0); // silent?
+        else if (Math.abs(heading) > 40) player.play(0);
+        else if (Math.abs(heading) > 20) player.play(1);
+        else player.play(2);
+      }
 
     }
 
