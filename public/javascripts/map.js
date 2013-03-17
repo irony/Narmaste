@@ -16,6 +16,7 @@ function MapCtrl($scope, $http){
   $scope.menuOpen = true;
   $scope.popupOpen = false;
   $scope.showTarget = false
+  $scope.showStationInfo = false;
 
   $scope.types = {"mataffär":"icon-shopping-cart"};
 
@@ -135,6 +136,17 @@ function MapCtrl($scope, $http){
 
       if (data.length) {
         $scope.trackingPoi = data[0]; // TODO: let the user choose one ;)
+      }
+
+      if($scope.query == 'Tunnelbana') {
+            $http.get('/api/stationInfo?q=Liljeholmen').success(function(departures) {
+              console.log(departures);
+              $scope.metros = departures.Departure.Metros.Metro;
+            });
+        $scope.showStationInfo = true;
+      }
+      else {
+        $scope.showStationInfo = false;
       }
 
       data = data.map(function(poi){

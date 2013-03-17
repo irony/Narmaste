@@ -215,7 +215,10 @@ input:focus {
 .showTarget {
   opacity:1 !important;
 }
-
+#stationInfo {
+  margin-top:20px;
+  font-weight:300;
+}
 .open .icon-time{
   color:#66ff66;
 }
