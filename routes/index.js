@@ -14,9 +14,14 @@ exports.poi = function(req, res) {
 
 	request('http://narmaste.se/Map/JsonQuery?q={query}&lng={lng}&lat={lat}'.replace('{query}', query.q).replace('{lng}', query.lng).replace('{lat}', query.lat), function(err, response, body) {
 		if (response.statusCode == 200 && !err) {
-			res.end(body);
+			var pois = JSON.parse(body);
+			pois = pois.map(function(poi){
+				delete poi.CalculatedOpeningHours;
+				return poi;
+			});
+			res.json(pois);
 		}
-	})
+	});
 
 
 };
