@@ -2,7 +2,7 @@ var projection = new MercatorProjection(256);
 
 // http://narmaste.se/Map/JsonQuery?q=brevlada&lng=17.271347045898455&lat=59.23474362209861
 function MapCtrl($scope, $http){
-  $scope.pois = ['poi1', 'poi2'];
+  $scope.pois = [];
   $scope.query = undefined;
   $scope.position = undefined;
   $scope.heading = undefined;
@@ -95,6 +95,7 @@ function MapCtrl($scope, $http){
       return player.play(2);
     }
 
+
     document.getElementById('flat').style.webkitTransform = 'perspective(300px) translateZ(0) rotateX(60deg) rotateZ(' + -heading + 'deg) translate3d(0,0,1px)';
 
     var all = document.getElementsByClassName('marker');
@@ -143,7 +144,7 @@ function MapCtrl($scope, $http){
 
 
       $scope.pois = data;
-      console.log($scope.pois);
+      console.log($scope);
     });
   }
 }
