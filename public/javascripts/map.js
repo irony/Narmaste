@@ -24,7 +24,7 @@ function MapCtrl($scope, $http){
 
   var poiUrl = 'api/poi?q={query}&lng={lng}&lat={lat}';
   var key = 'AIzaSyCxnLwfu0GSgTgFTjxQeV4_13jlmuMSTfU';
-  var mapUrl = "https://maps.googleapis.com/maps/api/staticmap?center={lat},{lng}&zoom={zoom}&scale=2&size=512x512&maptype=terrain&sensor=true&key=" + key;
+  var mapUrl = "https://maps.googleapis.com/maps/api/staticmap?center={lat},{lng}&zoom={zoom}&scale=2&size=256x256&maptype=terrain&sensor=true&key=" + key;
   var compass = new Compass();
 
   var scale = 20000;
@@ -61,11 +61,11 @@ function MapCtrl($scope, $http){
 
       var maps = transformMatrix.map(function(transform){  
         var point = {
-          x : center.x + ((transform.x * 512)/1.635 / scale),
-          y : center.y + ((transform.y * 512)/1.635 / scale)
+          x : center.x + ((transform.x.toPrecisionFixed() * 256) / scale.toPrecisionFixed()),
+          y : center.y + ((transform.y.toPrecisionFixed() * 256) / scale.toPrecisionFixed())
         };
         
-        var position = projection.fromPointToLatLng({x:point.x,y:point.y});
+        var position = projection.fromPointToLatLng({x:point.x.toPrecisionFixed(),y:point.y.toPrecisionFixed()});
         console.log('position',position);
         return {
           transform : transform,
