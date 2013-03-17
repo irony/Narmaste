@@ -14,13 +14,15 @@ function MapCtrl($scope, $http){
   $scope.menuOpen = false;
   $scope.popupOpen = false;
 
+  $scope.types = {"mataffär":"icon-shopping-cart"};
+
   console.log($scope);
 
   delete $http.defaults.headers.common['X-Requested-With'];
 
   var poiUrl = 'api/poi?q={query}&lng={lng}&lat={lat}';
   var key = 'AIzaSyCxnLwfu0GSgTgFTjxQeV4_13jlmuMSTfU';
-  var mapUrl = "https://maps.googleapis.com/maps/api/staticmap?center={lat},{lng}&zoom={zoom}&scale=2&size=256x256&maptype=terrain&sensor=true&style=feature:all%7Csaturation:-100%7Cweight:0.8&style=feature:water%7Clightness:90&key=" + key;
+  var mapUrl = "https://maps.googleapis.com/maps/api/staticmap?center={lat},{lng}&zoom={zoom}&scale=2&size=512x512&maptype=terrain&sensor=true&key=" + key;
   var compass = new Compass();
 
   var scale = 20000;
@@ -28,7 +30,7 @@ function MapCtrl($scope, $http){
 
   $scope.updateQuery = function(type) {
     $scope.query = type;
-    $scope.menuOpen = false;
+    //$scope.menuOpen = false;
   };
 
   $scope.$watch('query', function(){
@@ -46,9 +48,6 @@ function MapCtrl($scope, $http){
     if ($scope.position) {
       var center = projection.fromLatLngToPoint($scope.position);
       var zoom = $scope.zoom || 12;
-     
-      
-      console.log('center', center);
 
       var transformMatrix = [
       {x:-1, y:-1},
@@ -61,19 +60,20 @@ function MapCtrl($scope, $http){
       {x: 0, y: 1},
       {x: 1, y: 1},
       ];
-      var maps = transformMatrix.map(function(transform){
-        
+
+      var maps = transformMatrix.map(function(transform){  
         var point = {
-          x : center.x + ((transform.x * 256) / scale),
-          y : center.y + ((transform.y * 256) / scale)
+          x : center.x + ((transform.x * 512)/1.635 / scale),
+          y : center.y + ((transform.y * 512)/1.635 / scale)
         };
         
         var position = projection.fromPointToLatLng({x:point.x,y:point.y});
+        console.log('position',position);
         return {
           transform : transform,
           point:{
-            x:Math.floor(center.x + transform.x * 256) - 256 - 256 / 2,
-            y:Math.floor(center.y + transform.y * 256) - 256 - 256 / 2
+            x:Math.floor(center.x + transform.x * 512) - 512 - 512 / 2,
+            y:Math.floor(center.y + transform.y * 512) - 512 - 512 / 2
           },
           url : mapUrl.replace('{lat}', position.lat).replace('{lng}', position.lng).replace('{zoom}', zoom)
         };
@@ -90,7 +90,12 @@ function MapCtrl($scope, $http){
   compass.onHeadingChange = function(heading){
     $scope.heading = Math.round(heading);
     console.log('scopeHeading', $scope.heading);
-    document.getElementById('flat').style.webkitTransform = 'perspective(800px) translateZ(0) rotateX(60deg) rotateZ(' + -heading + 'deg) translate3d(0,0,1px)';
+    document.getElementById('flat').style.webkitTransform = 'perspective(300px) translateZ(0) rotateX(60deg) rotateZ(' + -heading + 'deg) translate3d(0,0,1px)';
+
+    var all = document.getElementsByClassName('marker');
+    for (var i = 0; i < all.length; i++) {
+      all[i].style.webkitTransform = "translateZ(50px) rotateX(-90deg) rotateY(" + (-heading) + "deg) ";
+    }
   };
   compass.onPositionChange = function(position){
     $scope.position = position;
@@ -105,7 +110,6 @@ function MapCtrl($scope, $http){
 
     $http.get(poiUrl.replace('{query}', $scope.query).replace('{lng}', $scope.position.lng).replace('{lat}', $scope.position.lat))
     .success(function(data){
-      data.push({Id: 'you', Position : {lng : $scope.position.lng, lat:$scope.position.lat}, Name: 'You', IconUrl:'/images/arrow_down.png'});
       data = data.map(function(poi){
         var point = projection.fromLatLngToPoint({lng:poi.Position.Longitude, lat: poi.Position.Latitude});
 
@@ -114,10 +118,8 @@ function MapCtrl($scope, $http){
           y: Math.floor((center.y - point.y) * scale)
         };
 
-        console.log(pixelOffset);
-
-        poi.x = pixelOffset.x + 256 * 2;
-        poi.y = pixelOffset.y + 256 * 2;
+        poi.x = pixelOffset.x + 512;
+        poi.y = pixelOffset.y + 512;
         poi.style = 'left:' + Math.round(poi.x) + "px; top:" + Math.round(poi.y) + "px";
 
         return poi;
