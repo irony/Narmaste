@@ -3,7 +3,7 @@
  */
 
 exports.index = function(req, res){
-  res.render('index', { title: 'Närmaste.se' })
+  res.render('index', { title: 'Närmaste.se' });
 };
 
 exports.poi = function(req, res) {
@@ -13,7 +13,7 @@ exports.poi = function(req, res) {
 		, query = url_parts.query;
 
 	request('http://narmaste.se/Map/JsonQuery?q={query}&lng={lng}&lat={lat}'.replace('{query}', query.q).replace('{lng}', query.lng).replace('{lat}', query.lat), function(err, response, body) {
-		if (response.statusCode == 200 && !err) {
+		if (response.statusCode === 200 && !err) {
 			var pois = JSON.parse(body);
 			pois = pois.map(function(poi){
 				poi.OpenNow = poi.CalculatedOpeningHours && poi.CalculatedOpeningHours.OpenNow;
@@ -24,10 +24,7 @@ exports.poi = function(req, res) {
 			res.json(pois);
 		}
 	});
-
-
 };
-
 
 exports.stationInfo = function(req, res) {
 	var request = require('request')
@@ -58,4 +55,3 @@ exports.stationInfo = function(req, res) {
 
 
 };
-

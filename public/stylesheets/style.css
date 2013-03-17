@@ -18,6 +18,10 @@ a {
 
 /* Layout
 ----------------------------------------------------*/
+#wrapper {
+  height:100%;
+  width:100%;
+}
 #search {
   background:#fff;
   width:94%;
@@ -57,7 +61,44 @@ input:focus {
   height:256px;
   position: absolute;
 }
+#whereTo div {
+  left: 50%;
+  top: 50%;
+  position: absolute;
+  margin-top: -167px;
+  margin-left: -51px;
+  font-size:200px;
+  -webkit-transition:all 500ms ease;
+}
+.bearingLeft {
+  color:#333;
+}
+.bearingRight {
+  -webkit-transform:rotate(180deg);
+  margin-left:-28px !important;
+  color:#333;
+}
+.bearingStraight {
+  -webkit-transform:rotate(90deg);
+  margin-top:-190px !important;
+  font-size:100px !important;
+  margin-left:-14px !important;
+  color:#ff0077;
+  -webkit-animation: arrowMove infinite 1s linear;
+}
+@-webkit-keyframes arrowMove {
+    from {
+        top:50%;
+    }
 
+    50% {
+      top:40%;
+    }
+
+    to {
+        top:50%;
+    }
+}
 #clearInput {
   color:#666;
   width:30px;
@@ -111,6 +152,31 @@ input:focus {
 }
 #closestInfo a {
   color:#fff;
+}
+
+#showTarget {
+  text-align:center;
+  margin-top:-60px;
+  opacity:0;
+  width:94% !important;
+  -webkit-transition:all 500ms ease;
+  position:absolute;
+  top:50%;
+  left:10px;
+  color:#333;
+  font-family:'Merriweather Sans';
+  font-weight:800;
+}
+#targetName {
+  font-size:24px;
+  margin-bottom:20px;
+}
+#distanceToTarget {
+  font-size:36px;
+  color:#999;
+}
+.showTarget {
+  opacity:1 !important;
 }
 
 .open .icon-time{
@@ -273,7 +339,7 @@ rgba(200, 0, 0, .5));
   top:0;
   left:0;
   height:0;
-  width:0;
+  width:100%;
   background:rgba(33,33,33,0.6);
   z-index:3000;
   -webkit-transform:translate3d(0,0,3000px);
