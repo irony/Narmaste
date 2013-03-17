@@ -16,7 +16,19 @@ exports.poi = function(req, res) {
 		if (response.statusCode == 200 && !err) {
 			res.end(body);
 		}
-	})
-
-
+	});
 };
+
+exports.subway = function(req, res) {
+		var request = require('request')
+		, url = require('url')
+		, url_parts = url.parse(req.url, true)
+		, query = url_parts.query;
+
+	request('https://api.trafiklab.se/sl/realtid/GetDepartures.json?siteId=9294&key=', function(err, response, body) {
+		if (response.statusCode == 200 && !err) {
+			res.end(body);
+		}
+	});
+};
+

@@ -2,18 +2,28 @@ script(src="/javascripts/map.js")
 
 div#wrapper(ng-controller="MapCtrl")
 	//i(class="icon-refresh icon-spin iconBig")
-	div#flat(ng-click='mapClick')
-		//img(ng-repeat="map in maps", style="left:{{map.point.x}}px; top:{{map.point.y}}px", class="mapTile", ng-src="{{map.url}}")
-		div(id="{{poi.Id}}", title="{{poi.Name}}",ng-repeat="poi in pois",class="marker open-{{poi.OpenToday}}", style="{{poi.style}}", ng-mouseover="popupOpen = !popupOpen", ng-mouseleave="popupOpen = !popupOpen", ng-show="poi.distance < 2000")
-			img(ng-src="{{poi.IconUrl}}")
-			div.popup(ng-show="popupOpen")
-				div.popupName
-					{{poi.Name}}
-				div.popupAddress
-					{{poi.Address}}
-				div.popupStoreHours
-					{{poi.OpenToday}}
-					{{poi.OpenTomorrow}}
+	//- div#flat(ng-click='mapClick')
+	//- 	//img(ng-repeat="map in maps", style="left:{{map.point.x}}px; top:{{map.point.y}}px", class="mapTile", ng-src="{{map.url}}")
+	//- 	div(id="{{poi.Id}}", title="{{poi.Name}}",ng-repeat="poi in pois",class="marker open-{{poi.OpenToday}}", style="{{poi.style}}", ng-mouseover="popupOpen = !popupOpen", ng-mouseleave="popupOpen = !popupOpen", ng-show="poi.distance < 2000")
+	//- 		img(ng-src="{{poi.IconUrl}}")
+	//- 		div.popup(ng-show="popupOpen")
+	//- 			div.popupName
+	//- 				{{poi.Name}}
+	//- 			div.popupAddress
+	//- 				{{poi.Address}}
+	//- 			div.popupStoreHours
+	//- 				{{poi.OpenToday}}
+	//- 				{{poi.OpenTomorrow}}
+
+	div#whereTo(ng-show="query")
+		div#toTheLeft(ng-class="{bearingStraight: showTarget, bearingLeft: bearing > 15, bearingRight: bearing < -15}")
+			i(class="icon-angle-left")
+	
+	div#showTarget(ng-class="{showTarget:showTarget}")
+		div#targetName
+			{{pois[0].Name}}
+		div#distanceToTarget
+			{{distance}}m
 
 	div#menuLeft(ng-click="menuOpen = !menuOpen")
 		i(class="icon-align-justify")
@@ -25,12 +35,11 @@ div#wrapper(ng-controller="MapCtrl")
 				div#clearInput(ng-click="query = ''")
 					span x
 
-			div#closest(ng-show="query")
+			div#closest(ng-show="query", ng-click="menuOpen = !menuOpen")
 				span Närmaste "{{query}}" är 
 					div.closestHit {{pois[0].Name}}
 				i(class="icon-lock lockon")
 			div#closestInfo
-				//div#closestName {{pois[0].Name}}
 				div#closestDetails(ng-show="pois[0].Details")
 					{{pois[0].Details}}
 				div#closestOpenToday(ng-show="pois[0].OpenToday")
