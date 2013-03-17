@@ -40,11 +40,6 @@ function MapCtrl($scope, $http){
     bind();
   });
 
-  $scope.mapClick = function(event){
-    console.log(event);
-
-  };
-
   $scope.$watch('position', function(){
 
     if ($scope.position) {
@@ -85,14 +80,19 @@ function MapCtrl($scope, $http){
     bind();
   });
   
-  $scope.$watch('heading', function() {
-    console.log('headingChange');
+  
+  $scope.$watch('heading', function(heading) {
+    console.log('heading', heading);
   });
 
   compass.onHeadingChange = function(heading){
     $scope.heading = Math.round(heading);
     if ($scope.trackingPoi){
       $scope.bearing = compass.getBearingDelta({lat: $scope.trackingPoi.Position.Latitude, lng: $scope.trackingPoi.Position.Longitude});
+      if (Math.abs(heading) > 90) return player.play(0); // silent?
+      if (Math.abs(heading) > 40) return player.play(0);
+      if (Math.abs(heading) > 20) return player.play(1);
+      return player.play(2);
     }
 
     document.getElementById('flat').style.webkitTransform = 'perspective(300px) translateZ(0) rotateX(60deg) rotateZ(' + -heading + 'deg) translate3d(0,0,1px)';
