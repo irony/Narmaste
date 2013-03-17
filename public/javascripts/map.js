@@ -94,6 +94,11 @@ function MapCtrl($scope, $http){
     if ($scope.trackingPoi){
       $scope.bearing = compass.getBearingDelta({lat: $scope.trackingPoi.Position.Latitude, lng: $scope.trackingPoi.Position.Longitude});
       $scope.distance = compass.getDistanceTo({lat: $scope.trackingPoi.Position.Latitude, lng: $scope.trackingPoi.Position.Longitude});
+      
+      // if (Math.abs(heading) > 90) return player.play(0); // silent?
+      // if (Math.abs(heading) > 40) return player.play(0);
+      // if (Math.abs(heading) > 20) return player.play(1);
+      // return player.play(2);
 
       $scope.$apply(function() { $scope.bearing = $scope.bearing});
       $scope.$apply(function() { $scope.distance = Math.round($scope.distance * 1000)});
