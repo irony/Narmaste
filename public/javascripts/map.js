@@ -37,6 +37,7 @@ function MapCtrl($scope, $http){
 
   $scope.$watch('query', function(){
     console.log('queryChange');
+    $scope.pois = [];
     bind();
   });
 

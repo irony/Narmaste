@@ -112,6 +112,15 @@ input:focus {
 #closestInfo a {
   color:#fff;
 }
+
+.open .icon-time{
+  color:#66ff66;
+}
+
+.closed .icon-time{
+  color:#ff6666;
+}
+
 .iconBig {
   font-size:120px;
   color:#666;

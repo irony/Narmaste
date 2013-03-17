@@ -16,6 +16,8 @@ exports.poi = function(req, res) {
 		if (response.statusCode == 200 && !err) {
 			var pois = JSON.parse(body);
 			pois = pois.map(function(poi){
+				poi.OpenNow = poi.CalculatedOpeningHours && poi.CalculatedOpeningHours.OpenNow;
+				poi.OpeningIn = poi.CalculatedOpeningHours && poi.CalculatedOpeningHours.OpeningIn;
 				delete poi.CalculatedOpeningHours;
 				return poi;
 			});
