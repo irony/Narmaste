@@ -16,7 +16,7 @@ div#wrapper(ng-controller="MapCtrl")
 			i(class="icon-time")
 			{{pois[0].OpenToday}}
 		div#stationInfo(ng-show="showStationInfo")
-			div(ng-repeat="metro in metros")
+			div(ng-repeat="metro in metros",class="metro")
 				{{metro.DisplayRow1}}
 
 	div#menuLeft(ng-click="menuOpen = !menuOpen")

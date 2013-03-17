@@ -219,6 +219,9 @@ input:focus {
   margin-top:20px;
   font-weight:300;
 }
+.metro {
+  margin-bottom:5px;
+}
 .open .icon-time{
   color:#66ff66;
 }

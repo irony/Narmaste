@@ -124,9 +124,6 @@ function MapCtrl($scope, $http){
 
     }
 
-    $scope.$apply(function() { $scope.bearing = $scope.bearing});
-    $scope.$apply(function() { $scope.distance = Math.round($scope.distance * 1000)});
-
     if ($scope.bearing < 15 && $scope.bearing > -15) {
       $scope.showTarget = true;
     }
@@ -157,7 +154,6 @@ function MapCtrl($scope, $http){
 
       if($scope.query == 'Tunnelbana') {
             $http.get('/api/stationInfo?q=Liljeholmen').success(function(departures) {
-              console.log(departures);
               $scope.metros = departures.Departure.Metros.Metro;
             });
         $scope.showStationInfo = true;

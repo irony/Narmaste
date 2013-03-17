@@ -32,16 +32,13 @@ exports.stationInfo = function(req, res) {
 		, key = '3806b65f3aa2bb60d8454a94790bfb75'
 		, query = req.query;
 
-		console.log(query);
 
 	request('https://api.trafiklab.se/sl/realtid/GetSite.json?stationSearch={query}&key={key}'.replace('{query}', query.q).replace('{key}', key), function(err, response, body) {
-			console.log('got site', err, response.statusCode);
 		if (response.statusCode === 200 && !err) {
 			var siteResponse = JSON.parse(body);
 			var siteId = siteResponse.Hafas.Sites.Site.Number;
 			
 			request('https://api.trafiklab.se/sl/realtid/GetDepartures.json?siteId={siteId}&key={key}'.replace('{siteId}', siteId).replace('{key}', key), function(err, response, body) {
-			console.log('got departure', err, response.statusCode);
 				if (response.statusCode === 200 && !err) {
 					var departureResponse = JSON.parse(body);
 
