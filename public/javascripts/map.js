@@ -6,6 +6,8 @@ function MapCtrl($scope, $http){
   $scope.query = undefined;
   $scope.position = undefined;
   $scope.heading = undefined;
+  $scope.distance = undefined;
+  $scope.bearing = undefined;
 
   $scope.flatStyle = undefined;
   $scope.mapUrl = undefined;
@@ -89,6 +91,10 @@ function MapCtrl($scope, $http){
 
   compass.onHeadingChange = function(heading){
     $scope.heading = Math.round(heading);
+    if ($scope.trackingPoi)
+      $scope.bearing = compass.getBearingTo($scope.trackingPoi.position).bearing;
+      console.log($scope.bearing);
+
     console.log('scopeHeading', $scope.heading);
     document.getElementById('flat').style.webkitTransform = 'perspective(300px) translateZ(0) rotateX(60deg) rotateZ(' + -heading + 'deg) translate3d(0,0,1px)';
 
@@ -99,6 +105,10 @@ function MapCtrl($scope, $http){
   };
   compass.onPositionChange = function(position){
     $scope.position = position;
+    
+    if ($scope.trackingPoi)
+      $scope.distance = compass.getBearingTo($scope.trackingPoi.position).distance;
+
   };
 
   function bind(){
@@ -110,6 +120,11 @@ function MapCtrl($scope, $http){
 
     $http.get(poiUrl.replace('{query}', $scope.query).replace('{lng}', $scope.position.lng).replace('{lat}', $scope.position.lat))
     .success(function(data){
+
+      if (data.length) {
+        $scope.trackingPoi = data[0]; // TODO: let the user choose one ;)
+      }
+
       data = data.map(function(poi){
         var point = projection.fromLatLngToPoint({lng:poi.Position.Longitude, lat: poi.Position.Latitude});
 

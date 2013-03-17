@@ -112,9 +112,15 @@ input:focus {
     position: absolute;
     z-index:1;
     opacity:0.9;
+<<<<<<< HEAD
     top: 75%;
     left: 60%;
     background:red;
+=======
+    top: 50%;
+    left: 50%;
+    background: #fefefe;
+>>>>>>> 1312e7da3e8a0d5a010e708501629545edc8caab
     -webkit-backface-visibility:visible;
     -webkit-transform-style: preserve-3d;
     -webkit-transform:perspective(300px) translateZ(0) rotateX(60deg) rotateZ(0) translate3d(0,0,1px);
@@ -169,15 +175,12 @@ input:focus {
     
 }
 .stripes {
-float: left;
-margin: 10px;
 -webkit-background-size: 50px 50px;
 -moz-background-size: 50px 50px;
 background-size: 50px 50px;
 -moz-box-shadow: 1px 1px 8px gray;
 -webkit-box-shadow: 1px 1px 8px gray;
 box-shadow: 1px 1px 8px gray;
-display:none;
 }
 
 .picnic {
