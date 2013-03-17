@@ -26,7 +26,7 @@ function MapCtrl($scope, $http){
 
   var poiUrl = 'api/poi?q={query}&lng={lng}&lat={lat}';
   var key = 'AIzaSyCxnLwfu0GSgTgFTjxQeV4_13jlmuMSTfU';
-  var mapUrl = "https://maps.googleapis.com/maps/api/staticmap?center={lat},{lng}&zoom={zoom}&scale=2&size=256x256&maptype=terrain&sensor=true&key=" + key;
+  var mapUrl = "https://maps.googleapis.com/maps/api/staticmap?center={lat},{lng}&zoom={zoom}&scale=2&size=512x512&maptype=terrain&sensor=true&key=" + key;
   var compass = new Compass();
 
   var scale = 20000;
@@ -52,6 +52,10 @@ function MapCtrl($scope, $http){
     bind();
   });
 
+  $scope.mapClick = function(event){
+    console.log(event);
+  };
+
   $scope.$watch('position', function(){
 
     if ($scope.position) {
@@ -72,11 +76,11 @@ function MapCtrl($scope, $http){
 
       var maps = transformMatrix.map(function(transform){
         var point = {
-          x : center.x + ((transform.x.toPrecisionFixed() * 256) / scale.toPrecisionFixed()),
-          y : center.y + ((transform.y.toPrecisionFixed() * 256) / scale.toPrecisionFixed())
+          x : center.x + ((transform.x * 512)/1.635 / scale),
+          y : center.y + ((transform.y * 512)/1.635 / scale)
         };
         
-        var position = projection.fromPointToLatLng({x:point.x.toPrecisionFixed(),y:point.y.toPrecisionFixed()});
+        var position = projection.fromPointToLatLng({x:point.x,y:point.y});
         console.log('position',position);
         return {
           transform : transform,
@@ -94,19 +98,21 @@ function MapCtrl($scope, $http){
 
   var beepTimer = null;
   var lastBearing = null;
+  $scope.$watch('bearing', function(bearing) {
+    $scope.bearing = bearing;
+  });
 
   compass.onHeadingChange = function(heading){
 
     $scope.heading = Math.round(heading);
-      console.log('bearing', $scope.trackingPoi);
     if ($scope.trackingPoi){
       $scope.bearing = compass.getBearingDelta({lat: $scope.trackingPoi.Position.Latitude, lng: $scope.trackingPoi.Position.Longitude});
       $scope.distance = compass.getDistanceTo({lat: $scope.trackingPoi.Position.Latitude, lng: $scope.trackingPoi.Position.Longitude});
+      
+      $scope.$apply(function() { $scope.bearing = $scope.bearing});
+      $scope.$apply(function() { $scope.distance = Math.round($scope.distance * 1000)});
 
-
-
-      clearTimeout(beepTimer);
-      if (!lastBearing || Math.abs(lastBearing - $scope.bearing) > 3)
+      if (!lastBearing || Math.abs(lastBearing - $scope.bearing) > 3) // ignore small changes
       {
         lastBearing = $scope.bearing;
         if (Math.abs(heading) > 90) player.play(0); // silent?
