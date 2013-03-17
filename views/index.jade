@@ -12,18 +12,6 @@ div#wrapper(ng-controller="MapCtrl")
 			{{pois[0].Name}}
 		div#distanceToTarget
 			{{distance}}m
-	div#flat
-		// img(ng-repeat="map in maps", style="left:{{map.point.x}}px; top:{{map.point.y}}px", class="mapTile", ng-src="{{map.url}}")
-		div(id="{{poi.Id}}", title="{{poi.Name}}",ng-repeat="poi in pois",class="marker open-{{poi.OpenToday}}", style="{{poi.style}}", ng-mouseover="popupOpen = !popupOpen", ng-mouseleave="popupOpen = !popupOpen", ng-show="poi.distance < 2000")
-			img(ng-src="{{poi.IconUrl}}")
-			div.popup(ng-show="popupOpen")
-				div.popupName
-					{{poi.Name}}
-				div.popupAddress
-					{{poi.Address}}
-				div.popupStoreHours
-					{{poi.OpenToday}}
-					{{poi.OpenTomorrow}}
 
 	div#menuLeft(ng-click="menuOpen = !menuOpen")
 		i(class="icon-align-justify")
