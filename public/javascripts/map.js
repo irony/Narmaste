@@ -72,8 +72,8 @@ function MapCtrl($scope, $http){
         return {
           transform : transform,
           point:{
-            x:Math.floor(center.x + transform.x * 512) - 512 - 512 / 2,
-            y:Math.floor(center.y + transform.y * 512) - 512 - 512 / 2
+            x:Math.floor(center.x + transform.x * 256) - 256 - 256 / 2,
+            y:Math.floor(center.y + transform.y * 256) - 256
           },
           url : mapUrl.replace('{lat}', position.lat).replace('{lng}', position.lng).replace('{zoom}', zoom)
         };

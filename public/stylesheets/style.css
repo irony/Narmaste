@@ -122,7 +122,7 @@ input:focus {
 
 #you
 {
-    margin-top:-512px;
+    margin-top:-256px;
     margin-left:-256px;
     position: absolute;
     border:0;
@@ -133,7 +133,7 @@ input:focus {
 #flat .marker
 {
     position: absolute;
-    -webkit-transform: translateZ(50px) rotateX(-90deg) rotateY(0deg);
+    -webkit-transform: translateZ(0px) rotateX(-60deg) rotateY(0deg);
         -webkit-transform-origin: center bottom;
     color: #000;
     font-weight: bold;
