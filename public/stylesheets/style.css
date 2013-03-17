@@ -105,6 +105,7 @@ input:focus {
     opacity:0.9;
     top: 50%;
     left: 50%;
+    background: #fefefe;
     -webkit-backface-visibility:visible;
     -webkit-transform-style: preserve-3d;
     -webkit-transform:perspective(800px) translateZ(0) rotateX(60deg) rotateZ(0) translate3d(0,0,1px);
@@ -144,15 +145,12 @@ input:focus {
     
 }
 .stripes {
-float: left;
-margin: 10px;
 -webkit-background-size: 50px 50px;
 -moz-background-size: 50px 50px;
 background-size: 50px 50px;
 -moz-box-shadow: 1px 1px 8px gray;
 -webkit-box-shadow: 1px 1px 8px gray;
 box-shadow: 1px 1px 8px gray;
-display:none;
 }
 
 .picnic {

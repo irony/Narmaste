@@ -1,8 +1,5 @@
 script(src="/javascripts/map.js")
 
-div.picnic.stripes
-	test
-
 div#wrapper(ng-controller="MapCtrl")
 	div#search
 		div#searchInput
@@ -13,11 +10,11 @@ div#wrapper(ng-controller="MapCtrl")
 
 		div#closest(ng-show="query")
 			span Din närmaste "{{query}}" är 
-				div.closestHit {{pois[0].Name}}
+				div.closestHit {{pois[0].Name}} {{bearing}} {{distance}}
 			i(class="icon-lock lockon")
 
-	div#flat(ng-click='mapClick')
-		img(ng-repeat="map in maps", data-transform="{{map.transform}}", style="left:{{map.point.x}}px; top:{{map.point.y}}px", class="mapTile", src="{{map.url}}")
+	#flat
+		// img(ng-repeat="map in maps", data-transform="{{map.transform}}", style="left:{{map.point.x}}px; top:{{map.point.y}}px", class="mapTile", src="{{map.url}}")
 		div(id="{{poi.Id}}", title="{{poi.Name}}",ng-repeat="poi in pois",class="marker open-{{poi.OpenToday}}", style="{{poi.style}}", ng-mouseover="popupOpen = !popupOpen", ng-mouseleave="popupOpen = !popupOpen")
 			img(ng-src="{{poi.IconUrl}}")
 			div.popup(ng-show="popupOpen")
