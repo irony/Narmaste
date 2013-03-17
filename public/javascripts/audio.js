@@ -111,7 +111,6 @@ var player = (function (src, n, spriteLength, audioLead) {
       }
       
       if (track) {
-      console.log('play', track);
         track.play(position);
       } else {
         // console.log('could not find a track to play :(');

@@ -25,7 +25,7 @@ div#wrapper(ng-controller="MapCtrl")
 					{{poi.OpenToday}}
 					{{poi.OpenTomorrow}}
 
-	div#menuLeft(ng-click="menuOpen = !menuOpen")
+	div#menuLeft(ng-click="openMenu(menuOpen = !menuOpen)")
 		i(class="icon-align-justify")
 	div#overlay(ng-class="{opacityOpen: menuOpen}")
 		div#search

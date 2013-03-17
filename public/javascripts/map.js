@@ -31,6 +31,14 @@ function MapCtrl($scope, $http){
   var scale = 20000;
   $scope.zoom = 15;
 
+  $scope.openMenu = function(open){
+    if (open && $scope.pois.length) {
+      $scope.trackingPoi = $scope.pois[0]; // TODO: let the user choose one ;)
+    } else {
+      $scope.trackingPoi = null;
+    }
+  };
+
   $scope.updateQuery = function(type) {
     $scope.query = type;
     //$scope.menuOpen = false;
@@ -82,20 +90,25 @@ function MapCtrl($scope, $http){
     bind();
   });
 
+  var beepTimer = null;
+
   compass.onHeadingChange = function(heading){
     $scope.heading = Math.round(heading);
     if ($scope.trackingPoi){
       $scope.bearing = compass.getBearingDelta({lat: $scope.trackingPoi.Position.Latitude, lng: $scope.trackingPoi.Position.Longitude});
       $scope.distance = compass.getDistanceTo({lat: $scope.trackingPoi.Position.Latitude, lng: $scope.trackingPoi.Position.Longitude});
 
-      if (Math.abs(heading) > 90) return player.play(0); // silent?
-      if (Math.abs(heading) > 40) return player.play(0);
-      if (Math.abs(heading) > 20) return player.play(1);
-      return player.play(2);
+      clearTimeout(beepTimer);
+      beepTimer = setTimeout(function(){
+        if (Math.abs(heading) > 90) return player.play(0); // silent?
+        if (Math.abs(heading) > 40) return player.play(0);
+        if (Math.abs(heading) > 20) return player.play(1);
+        return player.play(2);
+      }, 200);
+
     }
 
     $scope.$apply(function() { $scope.bearing = $scope.bearing});
-    console.log($scope.distance);
     $scope.$apply(function() { $scope.distance = Math.round($scope.distance * 1000)});
 
     if ($scope.bearing < 15 && $scope.bearing > -15) {
@@ -105,7 +118,7 @@ function MapCtrl($scope, $http){
       $scope.showTarget = false;
     }
   };
-  
+
   compass.onPositionChange = function(position){
     $scope.position = position;
     
@@ -125,9 +138,6 @@ function MapCtrl($scope, $http){
     $http.get(poiUrl.replace('{query}', $scope.query).replace('{lng}', $scope.position.lng).replace('{lat}', $scope.position.lat))
     .success(function(data){
 
-      if (data.length) {
-        $scope.trackingPoi = data[0]; // TODO: let the user choose one ;)
-      }
 
       data = data.map(function(poi){
         var point = projection.fromLatLngToPoint({lng:poi.Position.Longitude, lat: poi.Position.Latitude});
