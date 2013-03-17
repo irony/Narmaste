@@ -94,28 +94,25 @@ function MapCtrl($scope, $http){
       return player.play(2);
     }
 
-      $scope.$apply(function() { $scope.bearing = $scope.bearing});
-      console.log($scope.distance);
-      $scope.$apply(function() { $scope.distance = Math.round($scope.distance * 1000)});
+    $scope.$apply(function() { $scope.bearing = $scope.bearing});
+    console.log($scope.distance);
+    $scope.$apply(function() { $scope.distance = Math.round($scope.distance * 1000)});
 
-      if ($scope.bearing < 15 && $scope.bearing > -15) {
-        $scope.showTarget = true;
-      }
-      else {
-        $scope.showTarget = false;
-      }
+    if ($scope.bearing < 15 && $scope.bearing > -15) {
+      $scope.showTarget = true;
+    }
+    else {
+      $scope.showTarget = false;
     }
   };
+  
   compass.onPositionChange = function(position){
     $scope.position = position;
     
     if ($scope.trackingPoi){
       $scope.distance = compass.getDistanceTo({lat: $scope.trackingPoi.Position.Latitude, lng: $scope.trackingPoi.Position.Longitude});
       // $scope.bearing = compass.getBearingTo({lat: $scope.trackingPoi.Position.Latitude, lng: $scope.trackingPoi.Position.Longitude});
-
-
     }
-
   };
 
   function bind(){
