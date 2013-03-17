@@ -29,7 +29,7 @@ div#wrapper(ng-controller="MapCtrl")
 				div#clearInput(ng-click="query = ''")
 					span x
 
-			div#closest(ng-show="query", ng-click="menuOpen = !menuOpen")
+			div#closest(ng-show="query", ng-click="startTracker(menuOpen = !menuOpen)")
 				span Närmaste "{{query}}" är 
 					div.closestHit {{pois[0].Name}}
 				i(class="icon-angle-right lockon")

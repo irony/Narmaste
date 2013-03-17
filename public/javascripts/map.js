@@ -1,4 +1,5 @@
 var projection = new MercatorProjection(256);
+var player = new Track('/audio/TrackingDevice.mp3', 3, 2000, 7000);
 
 // http://narmaste.se/Map/JsonQuery?q=brevlada&lng=17.271347045898455&lat=59.23474362209861
 function MapCtrl($scope, $http){
@@ -32,6 +33,15 @@ function MapCtrl($scope, $http){
   var scale = 20000;
   $scope.zoom = 15;
 
+  $scope.startTracker = function(open){
+    if (!open && $scope.pois.length) {
+      $scope.trackingPoi = $scope.pois[0]; // TODO: let the user choose one ;)
+      console.log('tracking', $scope.trackingPoi);
+    } else {
+      $scope.trackingPoi = null;
+    }
+  };
+
   $scope.updateQuery = function(type) {
     $scope.query = type;
     //$scope.menuOpen = false;
@@ -39,6 +49,7 @@ function MapCtrl($scope, $http){
 
   $scope.$watch('query', function(){
     console.log('queryChange');
+    $scope.pois = [];
     bind();
   });
 
@@ -64,7 +75,7 @@ function MapCtrl($scope, $http){
       {x: 1, y: 1},
       ];
 
-      var maps = transformMatrix.map(function(transform){  
+      var maps = transformMatrix.map(function(transform){
         var point = {
           x : center.x + ((transform.x * 512)/1.635 / scale),
           y : center.y + ((transform.y * 512)/1.635 / scale)
@@ -86,42 +97,51 @@ function MapCtrl($scope, $http){
     bind();
   });
 
+  var beepTimer = null;
+  var lastBearing = null;
   $scope.$watch('bearing', function(bearing) {
     $scope.bearing = bearing;
-  });3
+  });
 
   compass.onHeadingChange = function(heading){
+
     $scope.heading = Math.round(heading);
     if ($scope.trackingPoi){
       $scope.bearing = compass.getBearingDelta({lat: $scope.trackingPoi.Position.Latitude, lng: $scope.trackingPoi.Position.Longitude});
       $scope.distance = compass.getDistanceTo({lat: $scope.trackingPoi.Position.Latitude, lng: $scope.trackingPoi.Position.Longitude});
       
-      // if (Math.abs(heading) > 90) return player.play(0); // silent?
-      // if (Math.abs(heading) > 40) return player.play(0);
-      // if (Math.abs(heading) > 20) return player.play(1);
-      // return player.play(2);
-
       $scope.$apply(function() { $scope.bearing = $scope.bearing});
       $scope.$apply(function() { $scope.distance = Math.round($scope.distance * 1000)});
 
-      if ($scope.bearing < 15 && $scope.bearing > -15) {
-        $scope.showTarget = true;
+      if (!lastBearing || Math.abs(lastBearing - $scope.bearing) > 3) // ignore small changes
+      {
+        lastBearing = $scope.bearing;
+        if (Math.abs(heading) > 90) player.play(0); // silent?
+        else if (Math.abs(heading) > 40) player.play(0);
+        else if (Math.abs(heading) > 20) player.play(1);
+        else player.play(2);
       }
-      else {
-        $scope.showTarget = false;
-      }
+
+    }
+
+    $scope.$apply(function() { $scope.bearing = $scope.bearing});
+    $scope.$apply(function() { $scope.distance = Math.round($scope.distance * 1000)});
+
+    if ($scope.bearing < 15 && $scope.bearing > -15) {
+      $scope.showTarget = true;
+    }
+    else {
+      $scope.showTarget = false;
     }
   };
+
   compass.onPositionChange = function(position){
     $scope.position = position;
     
     if ($scope.trackingPoi){
       $scope.distance = compass.getDistanceTo({lat: $scope.trackingPoi.Position.Latitude, lng: $scope.trackingPoi.Position.Longitude});
       // $scope.bearing = compass.getBearingTo({lat: $scope.trackingPoi.Position.Latitude, lng: $scope.trackingPoi.Position.Longitude});
-
-
     }
-
   };
 
   function bind(){
@@ -134,9 +154,6 @@ function MapCtrl($scope, $http){
     $http.get(poiUrl.replace('{query}', $scope.query).replace('{lng}', $scope.position.lng).replace('{lat}', $scope.position.lat))
     .success(function(data){
 
-      if (data.length) {
-        $scope.trackingPoi = data[0]; // TODO: let the user choose one ;)
-      }
 
       if($scope.query == 'Tunnelbana') {
             $http.get('/api/stationInfo?q=Liljeholmen').success(function(departures) {
