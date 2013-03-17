@@ -16,7 +16,10 @@ function Compass(options)
 
   this.getBearingTo = function(position){
 
+<<<<<<< HEAD
     //console.log('from:', this.position, 'to:', position);
+=======
+>>>>>>> 2e38406ec595e3672e36205c019c5a2ad34dec87
     if (!position || !this.position) return;
 
     var hereLatLon = new LatLon(this.position.lat, this.position.lng);
