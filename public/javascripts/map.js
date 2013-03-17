@@ -90,12 +90,11 @@ function MapCtrl($scope, $http){
 
   compass.onHeadingChange = function(heading){
     $scope.heading = Math.round(heading);
-    if ($scope.trackingPoi)
-      $scope.bearing = compass.getBearingTo($scope.trackingPoi.position).bearing;
-      $scope.distance = compass.getBearingTo($scope.trackingPoi.position).distance;
-      console.log($scope.bearing);
+    if ($scope.trackingPoi){
+      $scope.bearing = compass.getBearingDelta({lat: $scope.trackingPoi.Position.Latitude, lng: $scope.trackingPoi.Position.Longitude});
+    }
 
-    console.log('scopeHeading', $scope.heading);
+
     document.getElementById('flat').style.webkitTransform = 'perspective(300px) translateZ(0) rotateX(60deg) rotateZ(' + -heading + 'deg) translate3d(0,0,1px)';
 
     var all = document.getElementsByClassName('marker');
@@ -106,8 +105,10 @@ function MapCtrl($scope, $http){
   compass.onPositionChange = function(position){
     $scope.position = position;
     
-    if ($scope.trackingPoi)
-      $scope.distance = compass.getBearingTo($scope.trackingPoi.position).distance;
+    if ($scope.trackingPoi){
+      $scope.distance = compass.getDistanceTo({lat: $scope.trackingPoi.Position.Latitude, lng: $scope.trackingPoi.Position.Longitude});
+      // $scope.bearing = compass.getBearingTo({lat: $scope.trackingPoi.Position.Latitude, lng: $scope.trackingPoi.Position.Longitude});
+    }
 
   };
 
