@@ -16,13 +16,23 @@ function Compass(options)
 
   this.getBearingTo = function(position){
 
+    if (!position || !this.position) return;
+
     var hereLatLon = new LatLon(this.position.lat, this.position.lng);
     var thereLatLon = new LatLon(position.lat, position.lng);
 
-    return {
-      bearing: hereLatLon.bearingTo(thereLatLon),
-      distance: hereLatLon.distanceTo(thereLatLon)
-    };
+    return hereLatLon.bearingTo(thereLatLon);
+
+  };
+
+  this.getDistanceTo = function(position){
+
+    if (!position || !this.position) return;
+
+    var hereLatLon = new LatLon(this.position.lat, this.position.lng);
+    var thereLatLon = new LatLon(position.lat, position.lng);
+
+    return hereLatLon.distanceTo(thereLatLon);
 
   };
 

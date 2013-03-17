@@ -92,7 +92,7 @@ function MapCtrl($scope, $http){
   compass.onHeadingChange = function(heading){
     $scope.heading = Math.round(heading);
     if ($scope.trackingPoi)
-      $scope.bearing = compass.getBearingTo($scope.trackingPoi.position).bearing;
+      $scope.bearing = compass.getBearingTo($scope.trackingPoi.position);
 
     console.log('scopeHeading', $scope.heading);
     document.getElementById('flat').style.webkitTransform = 'perspective(800px) translateZ(0) rotateX(60deg) rotateZ(' + -heading + 'deg) translate3d(0,0,1px)';
@@ -101,7 +101,7 @@ function MapCtrl($scope, $http){
     $scope.position = position;
     
     if ($scope.trackingPoi)
-      $scope.distance = compass.getBearingTo($scope.trackingPoi.position).distance;
+      $scope.distance = compass.getDistanceTo($scope.trackingPoi.position);
 
   };
 
