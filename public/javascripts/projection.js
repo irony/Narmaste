@@ -13,13 +13,13 @@ function radiansToDegrees(rad) {
 }
 
 function MercatorProjection(tileSize) {
-  this.pixelOrigin_ = {x: tileSize / 2, y: tileSize / 2};
-  this.pixelsPerLonDegree_ = tileSize / 360;
-  this.pixelsPerLonRadian_ = tileSize / (2 * Math.PI);
+  this.pixelOrigin_ = {x: 0, y: 0};
+  this.pixelsPerLonDegree_ = parseFloat(tileSize / 360);
+  this.pixelsPerLonRadian_ = parseFloat(tileSize / (2 * Math.PI));
 }
 
-MercatorProjection.prototype.fromLatLngToPoint = function(latLng, opt_point) {
-  var point = opt_point || {x:0, y:0};
+MercatorProjection.prototype.fromLatLngToPoint = function(latLng, point) {
+  point = point || {x:0, y:0};
 
   var origin = this.pixelOrigin_;
   point.x = origin.x + latLng.lng * this.pixelsPerLonDegree_;

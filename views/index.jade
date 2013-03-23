@@ -3,18 +3,27 @@ script(src="/javascripts/map.js")
 div#wrapper(ng-controller="MapCtrl")
 	//i(class="icon-refresh icon-spin iconBig")
 
+	//div#flat(style="{{'perspective(800px) translateZ(0) rotateX(60deg) rotateZ(' + -heading + 'deg) translate3d(0,300px,0)'}}")
+	//	img(ng-repeat="map in maps", style="left:{{map.point.x}}px; top:{{map.point.y}}px", class="mapTile", ng-src="{{map.url}}")
+	div(id="{{poi.Id}}", title="{{poi.Name}}",ng-repeat="poi in pois",class="marker open-{{poi.OpenToday}}", style="{{poi.style}}", ng-mouseover="popupOpen = !popupOpen", ng-mouseleave="popupOpen = !popupOpen"	)
+		// img(ng-src="{{poi.IconUrl}}")
+		label(ng-class="(trackingPoi.OpenNow && 'open') || (!trackingPoi.OpenNow && 'closed')") 
+			i(class="icon-time")
+			{{trackingPoi.OpenToday}}
+			{{poi.Name + " (" + poi.distance + "m)"}} 
+
 	div#whereTo(ng-show="query")
 		div#toTheLeft(ng-class="{bearingStraight: showTarget, bearingLeft: bearing > 15, bearingRight: bearing < -15}")
 			i(class="icon-angle-left")
 	
 	div#showTarget(ng-class="{showTarget:showTarget}")
 		div#targetName
-			{{pois[0].Name}}
+			{{trackingPoi.Name}}
 		div#distanceToTarget
 			{{distance}}m
-		div#targetHours(ng-class="(pois[0].OpenNow && 'open') || (!pois[0].OpenNow && 'closed')", ng-show="pois[0].OpenNow")
+		div#targetHours(ng-class="(trackingPoi.OpenNow && 'open') || (!trackingPoi.OpenNow && 'closed')", ng-show="trackingPoi.OpenNow")
 			i(class="icon-time")
-			{{pois[0].OpenToday}}
+			{{trackingPoi.OpenToday}}
 		div#stationInfo(ng-show="showStationInfo")
 			div(ng-repeat="metro in metros",class="metro")
 				{{metro.DisplayRow1}}
@@ -29,7 +38,7 @@ div#wrapper(ng-controller="MapCtrl")
 				div#clearInput(ng-click="query = ''")
 					span x
 
-			div#closest(ng-show="query", ng-click="startTracker(menuOpen = !menuOpen)")
+			div#closest(ng-show="query", ng-click="startTracker(pois[0], menuOpen = !menuOpen)")
 				span Närmaste "{{query}}" är 
 					div.closestHit {{pois[0].Name}}
 				i(class="icon-angle-right lockon")

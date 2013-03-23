@@ -11,6 +11,7 @@ html, body {
   overflow:hidden;
   box-sizing:border-box;
   background:#f9f9f9;
+  border-radius: 3px;
 }
 a {
   color: #00B7FF;
@@ -57,9 +58,11 @@ input:focus {
   border:none;
 }
 .mapTile{
-  width:256px;
-  height:256px;
-  position: absolute;
+  width:1280px;
+  height:1280px;
+  margin-left: -640px;
+  margin-right: -640px;
+
 }
 #whereTo div {
   left: 50%;
@@ -247,7 +250,7 @@ input:focus {
     left: 50%;
     -webkit-backface-visibility:visible;
     -webkit-transform-style: preserve-3d;
-    -webkit-transform:perspective(300px) translateZ(0) rotateX(60deg) rotateZ(0) translate3d(0,0,1px);
+    -webkit-transform:perspective(800px) translateZ(0) rotateX(60deg) rotateZ(0) translate3d(0,0,1px);
 }
 
 #you
