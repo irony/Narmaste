@@ -3,20 +3,12 @@ script(src="/javascripts/map.js")
 div#wrapper(ng-controller="MapCtrl")
 	//i(class="icon-refresh icon-spin iconBig")
 
-	//div#flat(style="{{'perspective(800px) translateZ(0) rotateX(60deg) rotateZ(' + -heading + 'deg) translate3d(0,300px,0)'}}")
-	//	img(ng-repeat="map in maps", style="left:{{map.point.x}}px; top:{{map.point.y}}px", class="mapTile", ng-src="{{map.url}}")
-	div(id="{{poi.Id}}", title="{{poi.Name}}",ng-repeat="poi in pois",class="marker open-{{poi.OpenToday}}", style="{{poi.style}}", ng-mouseover="popupOpen = !popupOpen", ng-mouseleave="popupOpen = !popupOpen"	)
-		// img(ng-src="{{poi.IconUrl}}")
-		label(ng-class="(trackingPoi.OpenNow && 'open') || (!trackingPoi.OpenNow && 'closed')") 
-			i(class="icon-time")
-			{{trackingPoi.OpenToday}}
-			{{poi.Name + " (" + poi.distance + "m)"}} 
+	div#showTarget(ng-show="!!trackingPoi")
+		img(
+				src="https://maps.googleapis.com/maps/api/staticmap?center={{position.lat}},{{position.lng}}&markers={{trackingPoi.Position.Latitude}},{{trackingPoi.Position.Longitude}}&scale=2&size=320x320&maptype=terrain&sensor=true&key={{key}}",
+				style="{{'-webkit-transform:rotateZ(' + -heading + 'deg)'}}"
+			 )
 
-	div#whereTo(ng-show="query")
-		div#toTheLeft(ng-class="{bearingStraight: showTarget, bearingLeft: bearing > 15, bearingRight: bearing < -15}")
-			i(class="icon-angle-left")
-	
-	div#showTarget(ng-class="{showTarget:showTarget}")
 		div#targetName
 			{{trackingPoi.Name}}
 		div#distanceToTarget
@@ -28,6 +20,31 @@ div#wrapper(ng-controller="MapCtrl")
 			div(ng-repeat="metro in metros",class="metro")
 				{{metro.DisplayRow1}}
 
+	div#whereTo(ng-show="!!trackingPoi")
+		div#toTheLeft(ng-class="{bearingStraight: showTarget, bearingLeft: bearing > 15, bearingRight: bearing < -15}")
+			i(class="icon-angle-left")
+
+
+	//div#flat(style="{{'perspective(800px) translateZ(0) rotateX(60deg) rotateZ(' + -heading + 'deg) translate3d(0,300px,0)'}}")
+	//	img(ng-repeat="map in maps", style="left:{{map.point.x}}px; top:{{map.point.y}}px", class="mapTile", ng-src="{{map.url}}")
+	.list
+		div(id="{{poi.Id}}", title="{{poi.Name}}",ng-repeat="poi in pois",class="marker open-{{poi.OpenToday}}", style="{{poi.style}}", ng-click="startTracker(poi)"	)
+			.entypo 
+				&#59175;
+				.distance(ng-show="!!poi.distance") {{((poi.distance < 1000 && poi.distance + "m")) || (Math.round(poi.distance / 1000) + "km")}}
+			
+			// img(ng-src="{{poi.IconUrl}}")
+			label(ng-class="(poi.OpenNow && 'open') || (!poi.OpenNow && 'closed')") 
+				// remove adress from name
+				.name {{poi.Name.split(',')[0]}}
+				// If adress is same as name we will not show the address
+				.address {{poi.Address.replace(poi.Name, '')}} 
+				.openingHours(ng-show="!!poi.OpenToday")
+					i(class="icon-time")
+					{{poi.OpenToday}}
+
+	
+
 	div#menuLeft(ng-click="menuOpen = !menuOpen")
 		i(class="icon-align-justify")
 	div#overlay(ng-class="{opacityOpen: menuOpen}")
@@ -38,21 +55,21 @@ div#wrapper(ng-controller="MapCtrl")
 				div#clearInput(ng-click="query = ''")
 					span x
 
-			div#closest(ng-show="query", ng-click="startTracker(pois[0], menuOpen = !menuOpen)")
+			div#closest(ng-show="query", ng-click="startTracker(allPois[0], menuOpen = !menuOpen)")
 				span Närmaste "{{query}}" är 
-					div.closestHit {{pois[0].Name}}
+					div.closestHit {{allPois[0].Name}}
 				i(class="icon-angle-right lockon")
 
-			div#closestInfo(ng-class="(pois[0].OpenNow && 'open') || (!pois[0].OpenNow && 'closed')")
-				//div#closestName {{pois[0].Name}}
-				div#closestDetails(ng-show="pois[0].Details")
+			div#closestInfo(ng-class="(allPois[0].OpenNow && 'open') || (!allPois[0].OpenNow && 'closed')")
+				//div#closestName {{allPois[0].Name}}
+				div#closestDetails(ng-show="allPois[0].Details")
 					{{pois[0].Details}}
-				div#closestOpenToday(ng-show="pois[0].OpenToday")
+				div#closestOpenToday(ng-show="allPois[0].OpenToday")
 					i(class="icon-time")
 					{{pois[0].OpenToday}}
-				div#closestLink(ng-show="pois[0].Source")
+				div#closestLink(ng-show="allPois[0].Source")
 					i(class="icon-external-link")
-					a(ng-href="{{'http://' + pois[0].Source}}") {{pois[0].Source}}
+					a(ng-href="{{allPois[0].Url}}") {{pois[0].Source}}
 
 
 		div#menu(ng-class="{menuOpen: menuOpen}")

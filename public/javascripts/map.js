@@ -8,6 +8,7 @@ function MapCtrl($scope, $http){
   $scope.query = undefined;
   $scope.position = undefined;
   $scope.heading = 0;
+  $scope.averageHeading = 0;
   $scope.distance = undefined;
   $scope.bearing = undefined;
 
@@ -17,7 +18,7 @@ function MapCtrl($scope, $http){
   // Toggle UI
   $scope.menuOpen = true;
   $scope.popupOpen = false;
-  $scope.showTarget = false
+  $scope.showTarget = false;
   $scope.showStationInfo = false;
 
   $scope.types = {"mataffär":"icon-shopping-cart"};
@@ -27,8 +28,8 @@ function MapCtrl($scope, $http){
   delete $http.defaults.headers.common['X-Requested-With'];
 
   var poiUrl = 'api/poi?q={query}&lng={lng}&lat={lat}';
-  var key = 'AIzaSyCxnLwfu0GSgTgFTjxQeV4_13jlmuMSTfU';
-  var mapUrl = "https://maps.googleapis.com/maps/api/staticmap?center={lat},{lng}&zoom={zoom}&scale=2&size=640x640&maptype=terrain&sensor=true&key=" + key;
+  $scope.key = 'AIzaSyCxnLwfu0GSgTgFTjxQeV4_13jlmuMSTfU';
+  var mapUrl = "https://maps.googleapis.com/maps/api/staticmap?center={lat},{lng}&zoom={zoom}&scale=2&size=640x640&maptype=terrain&sensor=true&key=" + $scope.key;
   var compass = new Compass();
 
   var scale = 20000;
@@ -110,13 +111,15 @@ function MapCtrl($scope, $http){
   compass.onHeadingChange = function(heading){
     
     lastHeadings.unshift(heading);
-    var averageHeading = Math.floor(lastHeadings.slice(0,3).reduce(function(a, b){
+    lastHeadings = lastHeadings.slice(0,5);
+
+    $scope.averageHeading = Math.floor(lastHeadings.reduce(function(a, b){
       return a + b;
     }) / lastHeadings.length);
 
-    if ( averageHeading !== $scope.heading){
+    if ( $scope.averageHeading !== $scope.heading){
 
-      $scope.heading = Math.round(averageHeading);
+      $scope.heading = Math.round($scope.averageHeading);
       if ($scope.trackingPoi){
         $scope.bearing = compass.getBearingDelta({lat: $scope.trackingPoi.Position.Latitude, lng: $scope.trackingPoi.Position.Longitude});
         $scope.distance = compass.getDistanceTo({lat: $scope.trackingPoi.Position.Latitude, lng: $scope.trackingPoi.Position.Longitude});
@@ -143,7 +146,7 @@ function MapCtrl($scope, $http){
       });
 
       $scope.pois = $scope.allPois.sort(function(a,b){
-        return Math.floor((Math.abs(a.bearing) - Math.abs(b.bearing)) / 45) * 45;
+        return Math.round((Math.abs(a.bearing) - Math.abs(b.bearing)) / 30) * 30;
       }).slice(0, 5).sort(function(a,b){
         return a.distance - b.distance;
       });
@@ -206,7 +209,7 @@ function MapCtrl($scope, $http){
 
 
       $scope.allPois = data;
-      $scope.pois = data.slice(0,50);
+      $scope.pois = $scope.allPois.slice(0,5);
       console.log($scope);
     });
   }

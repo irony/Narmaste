@@ -2,10 +2,6 @@
 ----------------------------------------------------*/
 html, body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  width:100%;
-  height:100%;
-  max-height:100%;
-  max-width:100%;
   margin:0;
   padding:20px;
   overflow:hidden;
@@ -15,6 +11,19 @@ html, body {
 }
 a {
   color: #00B7FF;
+}
+
+.font-entypo { font-family: 'entypo'; }
+
+@font-face {
+  font-family: 'entypo';
+  src: url('/fonts/entypo.eot');
+  src: url('/fonts/entypo.eot?#iefix') format('embedded-opentype'),
+       url('/fonts/entypo.woff') format('woff'),
+       url('/fonts/entypo.ttf') format('truetype'),
+       url('/fonts/entypo.svg#entypo') format('svg');
+  font-weight: normal;
+  font-style: normal;
 }
 
 /* Layout
@@ -64,6 +73,55 @@ input:focus {
   margin-right: -640px;
 
 }
+
+.list {
+  font-family:'Merriweather Sans';
+  margin: 0 -15px;
+  overflow: hidden;
+}
+
+.marker .entypo {
+  width:36px;
+  font-family: entypo;
+  font-size: 60px;
+  border-radius: 2px;
+  display: inline-block;
+  text-align: left;
+  vertical-align: top;
+  color:#fff;
+  background: #000;
+  margin-top: 15px;
+  margin-bottom: 5px;
+}
+
+.marker label{
+  display: inline-block;
+  padding: 20px 15px;
+  overflow: hidden;
+}
+
+.marker .openingHours{
+  color:#333;
+}
+
+.marker .address{
+  color:#333;
+}
+
+.marker .distance{
+  color:#fff;
+  font-family:'Merriweather Sans';
+  font-size: 12px;
+  width: 32px;
+  display: inline-block;
+  text-align: center;
+}
+
+.marker{
+  clear:both;
+}
+
+
 #whereTo div {
   left: 50%;
   top: 50%;
@@ -188,16 +246,17 @@ input:focus {
 
 #showTarget {
   text-align:center;
-  margin-top:-70px;
-  opacity:0;
+  margin-bottom:70px;
   width:94% !important;
   -webkit-transition:all 500ms ease;
-  position:absolute;
-  top:50%;
-  left:10px;
   color:#333;
   font-family:'Merriweather Sans';
   font-weight:800;
+}
+#showTarget img{
+  width:100%;
+  border-radius:50%;
+  margin-bottom: 30px;
 }
 #targetName {
   font-size:24px;
