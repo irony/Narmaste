@@ -31,14 +31,15 @@ div#wrapper(ng-controller="MapCtrl")
 		div(id="{{poi.Id}}", title="{{poi.Name}}",ng-repeat="poi in pois",class="marker open-{{poi.OpenToday}}", style="{{poi.style}}", ng-click="startTracker(poi)"	)
 			.entypo 
 				&#59175;
-				.distance(ng-show="!!poi.distance") {{((poi.distance < 1000 && poi.distance + "m")) || (Math.round(poi.distance / 1000) + "km")}}
-			
+				.distance(ng-show="poi.distance < 1000") {{poi.distance + "m" }}
+				.distance(ng-show="poi.distance >= 1000") {{parseFloat(poi.distance / 1000) + "km" }}
+				{{poi.distance}}
 			// img(ng-src="{{poi.IconUrl}}")
 			label(ng-class="(poi.OpenNow && 'open') || (!poi.OpenNow && 'closed')") 
 				// remove adress from name
 				.name {{poi.Name.split(',')[0]}}
 				// If adress is same as name we will not show the address
-				.address {{poi.Address.replace(poi.Name, '')}} 
+				.address {{poi.Address.replace(poi.Name, '')}} {{poi.bearing}}
 				.openingHours(ng-show="!!poi.OpenToday")
 					i(class="icon-time")
 					{{poi.OpenToday}}

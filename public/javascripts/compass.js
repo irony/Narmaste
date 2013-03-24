@@ -46,21 +46,39 @@ function Compass(options)
   this.heading = 0;
   this.onHeadingChange = null;
   this.onPositionChange = null;
+  this.position = {lat:0, lng:0};
+
+  this.reset = function() {
+    self.onPositionChange && self.onPositionChange(this.position);
+    self.onHeadingChange && self.onHeadingChange(this.heading);
+  };
 
   var ref = 0,
       logger,
       dir = 0,
       _transform = "WebkitTransform" in document.body.style ? "WebkitTransform" : "MozTransform" in document.body.style ? "MozTransform" : "msTransform" in document.body.style ? "msTransform" : false;
+  
 
+  function updatePosition(){
 
-  if (!options || options.updatePosition) {
     navigator.geolocation.getCurrentPosition(function(position) {
       if (self.onPositionChange) {
         var pos = {lat:position.coords.latitude, lng: position.coords.longitude};
-        self.onPositionChange(pos);
-        self.position = pos;
+
+        if (Math.round(self.position.lat * 1000 + self.position.lng * 1000) !== Math.round(pos.lat * 1000 + pos.lng * 1000))
+        {
+          self.onPositionChange(pos);
+          self.position = pos;
+        }
       }
     });
+  }
+
+  if (!options || options.updatePosition) {
+    setInterval(function(){
+
+      updatePosition();
+    }, options && options.updatePositionInterval || 1000);
   }
 
   if (!options || options.updateHeading) {

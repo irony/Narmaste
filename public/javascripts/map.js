@@ -66,9 +66,6 @@ function MapCtrl($scope, $http){
 
       scale = Math.pow(2, $scope.zoom);
      
-      
-      console.log('center', center);
-
       var transformMatrix = [
       //{x:-1, y:-1},
       //{x: 0, y:-1},
@@ -146,12 +143,12 @@ function MapCtrl($scope, $http){
       });
 
       $scope.pois = $scope.allPois.sort(function(a,b){
-        return Math.round((Math.abs(a.bearing) - Math.abs(b.bearing)) / 30) * 30;
+        return Math.round((Math.abs(a.bearing) - Math.abs(b.bearing)) / 90) * 90;
       }).slice(0, 5).sort(function(a,b){
         return a.distance - b.distance;
       });
 
-      if ($scope.bearing < 15 && $scope.bearing > -15) {
+      if ($scope.bearing < 25 && $scope.bearing > -25) {
         $scope.showTarget = true;
       }
       else {
@@ -165,12 +162,13 @@ function MapCtrl($scope, $http){
     $scope.position = position;
     
     if ($scope.trackingPoi){
-      $scope.distance = compass.getDistanceTo({lat: $scope.trackingPoi.Position.Latitude, lng: $scope.trackingPoi.Position.Longitude});
-      // $scope.bearing = compass.getBearingTo({lat: $scope.trackingPoi.Position.Latitude, lng: $scope.trackingPoi.Position.Longitude});
+      $scope.distance = compass.getDistanceTo({lat: $scope.trackingPoi.Position.Latitude, lng: $scope.trackingPoi.Position.Longitude}) * 1000;
+      $scope.bearing = compass.getBearingTo({lat: $scope.trackingPoi.Position.Latitude, lng: $scope.trackingPoi.Position.Longitude});
     }
   };
 
   function bind(){
+    // only update if we have actually moved
     if (!$scope.position)
       return;
 
@@ -181,8 +179,7 @@ function MapCtrl($scope, $http){
     .success(function(data){
 
 
-      if($scope.query == 'Tunnelbana') {
-        console.log(data[0])
+      if(data[0].Name.indexOf('Tunnelbana') >= 0 || data[0].Name.indexOf('T-bana') >= 0) {
             $http.get('/api/stationInfo?q=' + data[0].Name.replace('T-bana', '')).success(function(departures) {
               $scope.metros = departures.Departure.Metros.Metro;
             });
@@ -209,8 +206,8 @@ function MapCtrl($scope, $http){
 
 
       $scope.allPois = data;
-      $scope.pois = $scope.allPois.slice(0,5);
-      console.log($scope);
+      // $scope.pois = $scope.allPois.slice(0,5);
+      compass.reset();
     });
   }
 }
